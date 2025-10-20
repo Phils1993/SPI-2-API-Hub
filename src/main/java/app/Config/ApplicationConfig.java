@@ -1,4 +1,4 @@
-package app.applicationConfig;
+package app.Config;
 
 import app.routes.Routes;
 import io.javalin.Javalin;
