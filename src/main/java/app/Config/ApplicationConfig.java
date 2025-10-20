@@ -1,4 +1,4 @@
-package app.applicationConfig;
+package app.Config;
 
 import app.exceptions.ApiException;
 import app.routes.Routes;
