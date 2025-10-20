@@ -100,3 +100,33 @@ Each Day has day.getWeek() → Jackson goes back to serialize Week
 That Week again has getDays() → and now we’re in an infinite loop 🔁
 
 💥 Boom → StackOverflowError / Infinite recursion
+
+### 🧠 Why mappers?
+
+DTOs are used to:
+
+Control what data leaves or enters your API (avoid infinite recursion / sensitive data).
+
+Simplify serialization to JSON.
+
+Avoid leaking JPA entities to your frontend or API consumers.
+
+So the mapper’s job is simply to:
+
+Convert Entity → DTO for sending data.
+
+Convert DTO → Entity for saving data
+
+### 🧩 Recommended mapper structure
+
+You can make one mapper per aggregate:
+
+WeekMapper
+
+DayMapper
+
+DayExerciseMapper
+
+ExerciseMapper
+
+They’ll call each other to avoid circular logic
