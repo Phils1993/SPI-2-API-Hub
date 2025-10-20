@@ -13,6 +13,12 @@ public class DayExerciseKey implements Serializable {
     @Column(name = "exercise_id")
     private Integer exerciseId;
 
+    public DayExerciseKey() {}
+    public DayExerciseKey(Integer dayId, Integer exerciseId) {
+        this.dayId = dayId;
+        this.exerciseId = exerciseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

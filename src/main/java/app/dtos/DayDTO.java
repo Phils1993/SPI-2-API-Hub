@@ -5,6 +5,7 @@ import app.entities.DayExercise;
 import app.eums.Difficulty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,5 +22,5 @@ public class DayDTO {
     private Difficulty difficulty;
     private int totalWorkoutTime;
 
-    private List<DayExerciseDTO>dayExercises;
+    private List<DayExerciseDTO>dayExercises = new ArrayList<>();
 }

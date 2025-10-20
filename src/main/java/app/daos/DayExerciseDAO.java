@@ -1,4 +1,109 @@
 package app.daos;
 
-public class DayExerciseDAO {
+import app.entities.DayExercise;
+import app.entities.DayExerciseKey;
+import app.exceptions.ApiException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+
+import java.util.List;
+
+public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
+
+    private static EntityManagerFactory emf;
+    private static DayExerciseDAO instance;
+
+    public static DayExerciseDAO getInstance(EntityManagerFactory _emf) {
+        if (instance == null) {
+            emf = _emf;
+            instance = new DayExerciseDAO();
+        }
+        return instance;
+    }
+
+    @Override
+    public DayExercise create(DayExercise dayExercise) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.persist(dayExercise);
+            em.getTransaction().commit();
+            return dayExercise;
+        } catch (Exception ex) {
+            throw new ApiException(500, "Error creating day-exercise link: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public DayExercise getById(int id) {
+        throw new UnsupportedOperationException("Use getByCompositeKey instead for DayExercise");
+    }
+
+    public DayExercise getByCompositeKey(DayExerciseKey key) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.find(DayExercise.class, key);
+        } catch (Exception ex) {
+            throw new ApiException(500, "DayExercise not found: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<DayExercise> getAll() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT de FROM DayExercise de ORDER BY de.id.dayId", DayExercise.class)
+                    .getResultList();
+        } catch (Exception ex) {
+            throw new ApiException(500, "Error fetching day-exercises: " + ex.getMessage());
+        }
+    }
+
+    public List<DayExercise> getExercisesByDayId(int dayId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT de FROM DayExercise de JOIN FETCH de.exercise WHERE de.day.id = :dayId",
+                            DayExercise.class)
+                    .setParameter("dayId", dayId)
+                    .getResultList();
+        } catch (Exception ex) {
+            throw new ApiException(500, "Error fetching exercises for day: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public DayExercise update(int id, DayExercise updated) {
+        throw new UnsupportedOperationException("Use updateByKey(DayExerciseKey, DayExercise) instead");
+    }
+
+    public DayExercise updateByKey(DayExerciseKey key, DayExercise updated) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            DayExercise existing = em.find(DayExercise.class, key);
+            if (existing == null) throw new ApiException(404, "DayExercise not found");
+
+            existing.setSets(updated.getSets());
+            existing.setReps(updated.getReps());
+            existing.setDurationSeconds(updated.getDurationSeconds());
+
+            em.merge(existing);
+            em.getTransaction().commit();
+            return existing;
+        } catch (Exception ex) {
+            throw new ApiException(500, "Error updating day-exercise: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteById(int id) {
+    }
+
+    public void deleteByKey(DayExerciseKey key) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            DayExercise existing = em.find(DayExercise.class, key);
+            if (existing == null) throw new ApiException(404, "DayExercise not found");
+            em.remove(existing);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new ApiException(500, "Error deleting day-exercise: " + ex.getMessage());
+        }
+    }
 }

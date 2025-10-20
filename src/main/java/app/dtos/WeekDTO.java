@@ -4,6 +4,7 @@ package app.dtos;
 import app.entities.Day;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,5 +16,5 @@ import java.util.List;
 public class WeekDTO {
     private Integer id;
     private int weekNumber;
-    private List<DayDTO> days;
+    private List<DayDTO> days = new ArrayList<>();
 }

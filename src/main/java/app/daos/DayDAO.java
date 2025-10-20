@@ -1,7 +1,9 @@
 package app.daos;
 
 import app.Config.HibernateConfig;
+import app.dtos.DayDTO;
 import app.entities.Day;
+import app.entities.Week;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,6 +24,25 @@ public class DayDAO implements IDAO<Day, Integer>{
             instance = new DayDAO();
         }
         return instance;
+    }
+    public Day Create(Day day, int weekId) {
+        try(EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+
+            Week week = em.find(Week.class, weekId);
+            if(week == null){
+                throw new ApiException(404,"Week not found");
+            }
+
+            day.setWeek(week);
+            week.getDays().add(day);
+
+            em.persist(day);
+            em.getTransaction().commit();
+            return day;
+        }catch (Exception ex){
+            throw new ApiException(500,"Failed to create day: " + ex.getMessage());
+        }
     }
 
     @Override

@@ -130,3 +130,26 @@ DayExerciseMapper
 ExerciseMapper
 
 They’ll call each other to avoid circular logic
+
+### 🧠 Purpose of the Service Layer
+
+Your service layer is the “brains” of your app.
+It:
+
+Coordinates multiple DAO calls.
+
+Applies business rules or validation.
+
+Converts between entities and DTOs using your mappers.
+
+Keeps controllers lightweight.
+
+You’ll have services like:
+
+WeekService
+
+DayService
+
+ExerciseService
+
+(optionally UserService later)
