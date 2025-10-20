@@ -1,6 +1,6 @@
 package app.security;
 
-import app.config.HibernateConfig;
+import app.Config.HibernateConfig;
 import app.entities.Role;
 import app.entities.User;
 import app.exceptions.ApiException;

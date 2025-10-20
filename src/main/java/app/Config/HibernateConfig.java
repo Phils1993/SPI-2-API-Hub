@@ -45,6 +45,8 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Exercise.class);
         configuration.addAnnotatedClass(Week.class);
         configuration.addAnnotatedClass(DayExerciseKey.class);
+        configuration.addAnnotatedClass(Role.class);
+        configuration.addAnnotatedClass(User.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest) {
