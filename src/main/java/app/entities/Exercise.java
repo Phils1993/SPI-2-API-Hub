@@ -26,6 +26,6 @@ public class Exercise {
     private String equipment;
     private Difficulty difficulty;
 
-    @OneToMany(mappedBy = "exercises", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private List<DayExercise> dayExercises = new ArrayList<>();
 }

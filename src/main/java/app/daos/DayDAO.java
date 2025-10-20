@@ -65,6 +65,10 @@ public class DayDAO implements IDAO<Day, Integer>{
             em.getTransaction().begin();
             Day foundDay = em.find(Day.class, id);
             if (foundDay == null) throw new ApiException(404, "Day not found");
+            foundDay.setDayName(day.getDayName());
+            foundDay.setWorkoutType(day.getWorkoutType());
+            foundDay.setDifficulty(day.getDifficulty());
+            foundDay.setTotalWorkoutTime(day.getTotalWorkoutTime());
             em.merge(foundDay);
             em.getTransaction().commit();
             return foundDay;
@@ -80,6 +84,7 @@ public class DayDAO implements IDAO<Day, Integer>{
             Day foundDay = em.find(Day.class, id);
             if (foundDay == null) throw new ApiException(404, "Day not found");
             em.remove(foundDay);
+            em.getTransaction().commit();
         }  catch(Exception ex){
             throw new ApiException(500, "no day deleted");
         }
