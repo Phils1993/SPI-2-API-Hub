@@ -1,5 +1,6 @@
 package app.applicationConfig;
 
+import app.exceptions.ApiException;
 import app.routes.Routes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
