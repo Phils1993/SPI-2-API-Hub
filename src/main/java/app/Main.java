@@ -1,3 +1,5 @@
+package app;
+
 import app.applicationConfig.ApplicationConfig;
 
 public class Main {
