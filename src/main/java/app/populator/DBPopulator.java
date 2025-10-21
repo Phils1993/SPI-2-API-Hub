@@ -1,4 +1,4 @@
-package app.utils;
+package app.populator;
 
 import app.Config.HibernateConfig;
 import app.daos.DayExerciseDAO;
@@ -80,6 +80,7 @@ public class DBPopulator {
         day2.setWeek(week1);
         dayDAO.create(day2);
 
+
         // Create DayExercises
         DayExercise de1 = new DayExercise();
         de1.setId(new DayExerciseKey(day1.getId(), ex1.getId()));
@@ -91,8 +92,8 @@ public class DBPopulator {
         dayExerciseDAO.create(de1);
 
         DayExercise de2 = new DayExercise();
-        de2.setId(new DayExerciseKey(day1.getId(), ex3.getId()));
-        de2.setDay(day1);
+        de2.setId(new DayExerciseKey(day2.getId(), ex3.getId()));
+        de2.setDay(day2);
         de2.setExercise(ex3);
         de2.setSets(3);
         de2.setReps(0);

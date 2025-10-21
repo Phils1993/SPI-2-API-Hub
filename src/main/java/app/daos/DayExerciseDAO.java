@@ -25,6 +25,10 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
     public DayExercise create(DayExercise dayExercise) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
+            dayExercise.setDay(em.merge(dayExercise.getDay()));
+            dayExercise.setExercise(em.merge(dayExercise.getExercise()));
+
             em.persist(dayExercise);
             em.getTransaction().commit();
             return dayExercise;
