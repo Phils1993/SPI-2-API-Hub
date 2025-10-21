@@ -34,9 +34,9 @@ public class ExerciseDAO implements IDAO<Exercise,Integer>{
     @Override
     public Exercise getById(int id) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(Exercise.class, id);
-        } catch (Exception ex) {
-            throw new ApiException(500, "Exercise not found: " + ex.getMessage());
+            Exercise exercise = em.find(Exercise.class, id);
+            if (exercise == null) throw new ApiException(404, "Exercise not found" + id);
+            return exercise;
         }
     }
 

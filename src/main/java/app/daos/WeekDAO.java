@@ -48,8 +48,8 @@ public class WeekDAO implements IDAO<Week,Integer> {
     public List<Week> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
-                            "SELECT DISTINCT w FROM Week w LEFT JOIN FETCH w.days d LEFT JOIN FETCH d.dayExercises de LEFT JOIN FETCH de.exercise " +
-                                    "ORDER BY w.weekNumber", Week.class)
+                            "SELECT w FROM Week w LEFT JOIN FETCH w.days d LEFT JOIN FETCH d.dayExercises de LEFT JOIN FETCH de.exercise e " +
+                                    "ORDER BY w.weekNumber, d.id", Week.class)
                     .getResultList();
         } catch (Exception ex) {
             throw new ApiException(500, "Error fetching weeks: " + ex.getMessage());

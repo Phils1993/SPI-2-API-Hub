@@ -25,4 +25,9 @@ public class Week {
 
     @OneToMany(mappedBy = "week", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Day> days = new HashSet<>();
+
+    public Week(int weekNumber) {
+        this.weekNumber = weekNumber;
+    }
+
 }

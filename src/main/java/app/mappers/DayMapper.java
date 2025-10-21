@@ -6,7 +6,7 @@ import app.entities.Day;
 import java.util.stream.Collectors;
 
 public class DayMapper {
-    public static DayDTO toDTO(Day day) {
+    public static DayDTO toDTO(Day day, boolean includedExercises) {
         if (day == null) return null;
 
         DayDTO dto = new DayDTO();
@@ -16,13 +16,17 @@ public class DayMapper {
         dto.setDifficulty(day.getDifficulty());
         dto.setTotalWorkoutTime(day.getTotalWorkoutTime());
 
-        if (day.getDayExercises() != null)
+        if (includedExercises && day.getDayExercises() != null)
             dto.setDayExercises(day.getDayExercises()
                     .stream()
                     .map(DayExerciseMapper::toDTO)
                     .collect(Collectors.toList()));
 
         return dto;
+    }
+    // Default mapping (no exercises)
+    public static DayDTO toDTO(Day day) {
+        return toDTO(day, false);
     }
 
     public static Day toEntity(DayDTO dto) {

@@ -28,14 +28,14 @@ public class DBPopulator {
     }
 
     public void populate() {
-        // Create Exercises
+        // Create Exercises and assign returned managed entities
         Exercise ex1 = new Exercise();
         ex1.setName("Push Up");
         ex1.setDescription("Upper body strength");
         ex1.setMuscleGroup("Chest");
         ex1.setEquipment("None");
         ex1.setDifficulty(Difficulty.NORMAL);
-        exerciseDAO.create(ex1);
+        ex1 = exerciseDAO.create(ex1);
 
         Exercise ex2 = new Exercise();
         ex2.setName("Squat");
@@ -43,7 +43,7 @@ public class DBPopulator {
         ex2.setMuscleGroup("Legs");
         ex2.setEquipment("None");
         ex2.setDifficulty(Difficulty.EASY);
-        exerciseDAO.create(ex2);
+        ex2 = exerciseDAO.create(ex2);
 
         Exercise ex3 = new Exercise();
         ex3.setName("Plank");
@@ -51,25 +51,25 @@ public class DBPopulator {
         ex3.setMuscleGroup("Core");
         ex3.setEquipment("None");
         ex3.setDifficulty(Difficulty.HARD);
-        exerciseDAO.create(ex3);
+        ex3 = exerciseDAO.create(ex3);
 
         // Create Weeks
         Week week1 = new Week();
         week1.setWeekNumber(1);
-        weekDAO.create(week1);
+        week1 = weekDAO.create(week1);
 
         Week week2 = new Week();
         week2.setWeekNumber(2);
-        weekDAO.create(week2);
+        week2 = weekDAO.create(week2);
 
-        // Create Days for Week 1
+        // Create Days for Week 1 and assign managed entities
         Day day1 = new Day();
         day1.setDayName("Monday");
         day1.setWorkoutType("Strength");
         day1.setTotalWorkoutTime(60);
         day1.setDifficulty(Difficulty.NORMAL);
         day1.setWeek(week1);
-        dayDAO.create(day1);
+        day1 = dayDAO.create(day1);
 
         Day day2 = new Day();
         day2.setDayName("Wednesday");
@@ -77,8 +77,7 @@ public class DBPopulator {
         day2.setTotalWorkoutTime(45);
         day2.setDifficulty(Difficulty.EASY);
         day2.setWeek(week1);
-        dayDAO.create(day2);
-
+        day2 = dayDAO.create(day2);
 
         // Create DayExercises
         DayExercise de1 = new DayExercise();

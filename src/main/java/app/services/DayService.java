@@ -22,8 +22,9 @@ public class DayService {
     }
 
     public DayDTO getById(int id) {
-        Day day = dayDAO.getById(id);
-        return DayMapper.toDTO(day);
+        //Day day = dayDAO.getById(id);
+        Day day = dayDAO.getByIdOrThrow(id);
+        return DayMapper.toDTO(day,true);
     }
 
     public List<DayDTO> getAll() {

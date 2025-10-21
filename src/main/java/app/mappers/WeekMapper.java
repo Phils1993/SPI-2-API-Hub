@@ -16,7 +16,7 @@ public class WeekMapper {
         if (week.getDays() != null)
             dto.setDays(week.getDays()
                     .stream()
-                    .map(DayMapper::toDTO)
+                    .map(day -> DayMapper.toDTO(day, true))
                     .collect(Collectors.toList()));
 
         return dto;

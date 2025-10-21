@@ -54,9 +54,11 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
 
     public DayExercise getByCompositeKey(DayExerciseKey key) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(DayExercise.class, key);
-        } catch (Exception ex) {
-            throw new ApiException(500, "DayExercise not found: " + ex.getMessage());
+            DayExercise dayExercise = em.find(DayExercise.class, key);
+            if (dayExercise == null) {
+                throw new ApiException(404, "DayExercise not found");
+            }
+            return dayExercise;
         }
     }
 

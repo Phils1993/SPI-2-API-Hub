@@ -58,13 +58,20 @@ public class DayDAO implements IDAO<Day, Integer>{
     @Override
     public Day getById(int id) {
         try(EntityManager em = emf.createEntityManager()){
-            return em.createQuery("SELECT d from Day d LEFT JOIN FETCH d.dayExercises de LEFT JOIN FETCH de.exercise " +
+            List<Day> result = em.createQuery("SELECT d from Day d LEFT JOIN FETCH d.dayExercises de LEFT JOIN FETCH de.exercise " +
                     "where d.id = :id", Day.class )
                     .setParameter("id", id)
-                    .getSingleResult();
+                    .getResultList();
+            return result.isEmpty() ? null : result.get(0);
         }  catch(Exception ex){
             throw new ApiException(500, "no day id found" + ex.getMessage());
         }
+    }
+    // Created this helper method to help enforce specific exception thrown (ApiException in this case)
+    public Day getByIdOrThrow(int id) {
+        Day day = getById(id);
+        if(day == null) throw new ApiException(404, "Day not found");
+        return day;
     }
 
     @Override
