@@ -24,6 +24,7 @@ public class Exercise {
     private String description;
     private String muscleGroup;
     private String equipment;
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)

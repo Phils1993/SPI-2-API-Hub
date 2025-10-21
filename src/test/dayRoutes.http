@@ -1,0 +1,12 @@
+### Create day
+POST http://localhost:7076/api/v1/day
+Content-Type: application/json
+
+{
+  "weekId": 3,
+  "dayName": "Monday",
+  "workoutType": "Strength",
+  "difficulty": "NORMAL",
+  "totalWorkoutTime": 45,
+  "dayExercises": []
+}

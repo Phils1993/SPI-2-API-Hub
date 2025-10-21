@@ -1,0 +1,11 @@
+### Create exercise for day
+POST http://localhost:7076/api/v1/dayExercise
+Content-Type: application/json
+
+{
+  "dayId": 3,
+  "exerciseId": 1,
+  "sets": 3,
+  "reps": 12,
+  "durationSeconds": 60
+}

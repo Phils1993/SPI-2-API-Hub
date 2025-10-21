@@ -20,8 +20,11 @@ public class DayController implements IController {
     public Handler create() {
         return (Context ctx) -> {
             DayDTO dayDTO = ctx.bodyAsClass(DayDTO.class);
-            int weekId = Integer.parseInt(ctx.pathParam("id"));
-            DayDTO newDayDTO = dayService.create(dayDTO, weekId);
+            if (dayDTO.getWeekId() == null) {
+                ctx.status(HttpStatus.BAD_REQUEST).json("Week ID is required");
+                return;
+            }
+            DayDTO newDayDTO = dayService.create(dayDTO, dayDTO.getWeekId());
             ctx.status(HttpStatus.CREATED).json(newDayDTO);
         };
     }

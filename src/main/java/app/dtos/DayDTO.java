@@ -23,4 +23,6 @@ public class DayDTO {
     private int totalWorkoutTime;
 
     private List<DayExerciseDTO>dayExercises = new ArrayList<>();
+
+    private Integer weekId;
 }

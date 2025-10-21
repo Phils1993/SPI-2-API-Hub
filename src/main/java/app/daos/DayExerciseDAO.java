@@ -1,7 +1,9 @@
 package app.daos;
 
+import app.entities.Day;
 import app.entities.DayExercise;
 import app.entities.DayExerciseKey;
+import app.entities.Exercise;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,20 +24,28 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
     }
 
     @Override
-    public DayExercise create(DayExercise dayExercise) {
+   public DayExercise create(DayExercise dayExercise) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            dayExercise.setDay(em.merge(dayExercise.getDay()));
-            dayExercise.setExercise(em.merge(dayExercise.getExercise()));
+            // Attach managed entities
+            Day managedDay = em.find(Day.class, dayExercise.getDay().getId());
+            Exercise managedExercise = em.find(Exercise.class, dayExercise.getExercise().getId());
+
+            dayExercise.setDay(managedDay);
+            dayExercise.setExercise(managedExercise);
 
             em.persist(dayExercise);
+
+            // Force Hibernate to initialize lazy proxies
+            managedExercise.getName();
+            managedDay.getId();
+
             em.getTransaction().commit();
             return dayExercise;
-        } catch (Exception ex) {
-            throw new ApiException(500, "Error creating day-exercise link: " + ex.getMessage());
         }
     }
+
 
     @Override
     public DayExercise getById(int id) {

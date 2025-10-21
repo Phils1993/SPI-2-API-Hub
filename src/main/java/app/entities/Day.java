@@ -21,6 +21,7 @@ public class Day {
 
     private String dayName;
     private String workoutType;
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     private int totalWorkoutTime;
 
