@@ -42,4 +42,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/SP2_API_HUB:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sp2_api_hub:latest
