@@ -1,4 +1,4 @@
-package app.Config;
+package app.config;
 
 import app.entities.*;
 import app.utils.Utils;

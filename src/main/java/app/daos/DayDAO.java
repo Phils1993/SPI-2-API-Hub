@@ -1,7 +1,5 @@
 package app.daos;
 
-import app.Config.HibernateConfig;
-import app.dtos.DayDTO;
 import app.entities.Day;
 import app.entities.Week;
 import app.exceptions.ApiException;

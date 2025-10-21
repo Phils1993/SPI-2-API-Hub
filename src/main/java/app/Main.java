@@ -1,6 +1,6 @@
 package app;
 
-import app.Config.ApplicationConfig;
+import app.config.ApplicationConfig;
 
 public class Main {
     public static void main(String[] args) {

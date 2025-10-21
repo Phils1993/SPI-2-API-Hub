@@ -1,7 +1,7 @@
-package app.Config;
+package app.config;
 
 import app.exceptions.ApiException;
-import app.routes.Routes;
+import app.routes.WeekRoutes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 public class ApplicationConfig {
 
     // Routes objekt som holder alle API endpoints
-    private static Routes routes = new Routes();
+    private static WeekRoutes routes = new WeekRoutes();
 
     /**
      * Konfiguration af Javalin-serveren
@@ -29,7 +29,7 @@ public class ApplicationConfig {
      * @return instans af Javalin
      */
     public static Javalin startServer(int port) {
-        routes = new Routes();                             // Opret ny Routes-instans
+        routes = new WeekRoutes();                             // Opret ny Routes-instans
         var app = Javalin.create(ApplicationConfig::configuration); // Opret Javalin med konfiguration
 
         // Global exception handler for ApiException

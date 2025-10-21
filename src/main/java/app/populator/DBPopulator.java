@@ -1,6 +1,6 @@
 package app.populator;
 
-import app.Config.HibernateConfig;
+import app.config.HibernateConfig;
 import app.daos.DayExerciseDAO;
 import app.daos.DayDAO;
 import app.daos.ExerciseDAO;
@@ -11,7 +11,6 @@ import app.entities.DayExerciseKey;
 import app.entities.Exercise;
 import app.entities.Week;
 import app.eums.Difficulty;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManagerFactory;
 
 public class DBPopulator {

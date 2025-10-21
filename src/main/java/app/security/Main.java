@@ -1,6 +1,6 @@
 package app.security;
 
-import app.Config.HibernateConfig;
+import app.config.HibernateConfig;
 import app.entities.Role;
 import app.entities.User;
 import app.exceptions.EntityNotFoundException;
