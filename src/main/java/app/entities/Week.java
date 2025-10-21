@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,5 +24,5 @@ public class Week {
     private int weekNumber;
 
     @OneToMany(mappedBy = "week", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Day> days = new ArrayList<>();
+    private Set<Day> days = new HashSet<>();
 }

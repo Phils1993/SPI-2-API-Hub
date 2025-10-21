@@ -33,7 +33,7 @@ public class WeekMapper {
             week.setDays(dto.getDays()
                     .stream()
                     .map(DayMapper::toEntity)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
 
         return week;
     }
