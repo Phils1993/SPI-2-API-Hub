@@ -1,0 +1,8 @@
+### Create week
+POST http://localhost:7076/api/v1/week
+Content-Type: application/json
+
+{
+  "weekNumber": 3,
+  "days": []
+}

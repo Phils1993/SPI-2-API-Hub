@@ -8,7 +8,7 @@ import io.javalin.http.HttpStatus;
 
 import java.util.List;
 
-public class WeekController implements IController {
+public class WeekController implements IController{
 
     private final WeekService weekService;
     public WeekController(WeekService weekService) {

@@ -1,27 +1,31 @@
 package app.routes;
 
 import app.Controllers.WeekController;
+import app.services.WeekService;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class WeekRoutes {
 
+    private final WeekController weekController;
+
+    public WeekRoutes(WeekService weekService) {
+        this.weekController = new WeekController(weekService);
+    }
+
     public EndpointGroup getRoutes() {
         return () -> {
             path("week", () -> {
-                post(WeekController::create);
-                get(WeekController::getAll);
+                post(weekController.create());
+                get(weekController.getAll());
 
                 path("{id}", () -> {
-                    get(WeekController::getById);
-                })
-            })
-            /* get routes
-            path("/highscores", highscoresRoutes.getRoutes());
-            path("/highscore", highscoreRoutes.getRoutes());
-
-             */
+                    get(weekController.getById());
+                    put(weekController.update());
+                    delete(weekController.delete());
+                });
+            });
         };
     }
 }
