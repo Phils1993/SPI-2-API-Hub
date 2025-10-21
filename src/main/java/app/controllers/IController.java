@@ -1,4 +1,4 @@
-package app.Controllers;
+package app.controllers;
 
 import io.javalin.http.Handler;
 

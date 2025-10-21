@@ -1,4 +1,4 @@
-package app.Controllers;
+package app.controllers;
 
 import app.dtos.DayDTO;
 import app.services.DayService;

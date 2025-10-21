@@ -1,4 +1,4 @@
-package app.Controllers;
+package app.controllers;
 
 import app.dtos.WeekDTO;
 import app.services.WeekService;
@@ -8,7 +8,7 @@ import io.javalin.http.HttpStatus;
 
 import java.util.List;
 
-public class WeekController implements IController {
+public class WeekController implements IController{
 
     private final WeekService weekService;
     public WeekController(WeekService weekService) {
@@ -38,7 +38,7 @@ public class WeekController implements IController {
             int id = Integer.parseInt(ctx.pathParam("id"));
             WeekDTO weekDTO = ctx.bodyAsClass(WeekDTO.class);
             WeekDTO updatedWeek = weekService.update(weekDTO, id);
-            ctx.status(HttpStatus.NO_CONTENT).json(updatedWeek);
+            ctx.status(HttpStatus.OK).json(updatedWeek);
         };
     }
 
