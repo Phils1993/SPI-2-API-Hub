@@ -1,5 +1,6 @@
 package DAO;
 
+import PopulatorTest.PopulatorTest;
 import app.config.HibernateConfig;
 import app.daos.WeekDAO;
 import app.entities.Week;
@@ -20,32 +21,23 @@ class WeekDAOTest {
     private WeekDAO weekDAO;
 
     @BeforeAll
-    void setupClass() {
+    void setupAll() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
-        weekDAO = WeekDAO.getInstance(emf);
-    }
+        weekDAO = new WeekDAO(emf);
 
-    @AfterAll
-    void tearDown(){
-        if(emf != null && (emf.isOpen())) {
-            emf.close();
+        // TRUNCATE all relevant tables before tests
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createNativeQuery("TRUNCATE TABLE day_exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE day RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE week RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.getTransaction().commit();
         }
-    }
 
-    @BeforeEach
-    void setup() {
-        // Clean DB
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM DayExercise").executeUpdate();
-        em.createQuery("DELETE FROM Day").executeUpdate();
-        em.createQuery("DELETE FROM Week").executeUpdate();
-        em.createQuery("DELETE FROM Exercise").executeUpdate();
-        em.getTransaction().commit();
-        em.close();
-
-        // Populate fresh data
-        new DBPopulator(emf).populate();
+        // Populate database after truncation
+        populatorTest = new PopulatorTest(emf);
+        populatorTest.populate();
     }
 
     @Test

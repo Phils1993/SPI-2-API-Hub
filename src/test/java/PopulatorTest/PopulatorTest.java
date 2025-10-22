@@ -1,5 +1,6 @@
-package app.populator;
+package PopulatorTest;
 
+import app.entities.DayExerciseKey;
 import app.config.HibernateConfig;
 import app.daos.DayDAO;
 import app.daos.DayExerciseDAO;
@@ -7,28 +8,29 @@ import app.daos.ExerciseDAO;
 import app.daos.WeekDAO;
 import app.entities.Day;
 import app.entities.DayExercise;
-import app.entities.DayExerciseKey;
 import app.entities.Exercise;
 import app.entities.Week;
 import app.eums.Difficulty;
 import jakarta.persistence.EntityManagerFactory;
 
-public class DBPopulator {
+public class PopulatorTest {
 
     private final WeekDAO weekDAO;
     private final DayDAO dayDAO;
     private final ExerciseDAO exerciseDAO;
     private final DayExerciseDAO dayExerciseDAO;
+    private final EntityManagerFactory emf;
 
-    public DBPopulator(EntityManagerFactory emf) {
-        // Use direct DAO instances instead of singletons
+    public PopulatorTest(EntityManagerFactory emf) {
+        this.emf = emf;
         this.weekDAO = new WeekDAO(emf);
         this.dayDAO = new DayDAO(emf);
         this.exerciseDAO = new ExerciseDAO(emf);
         this.dayExerciseDAO = new DayExerciseDAO(emf);
     }
 
-    public void populate() {
+
+    private void populate() {
         // Create Exercises
         Exercise ex1 = new Exercise();
         ex1.setName("Push Up");
@@ -98,13 +100,5 @@ public class DBPopulator {
         de2.setReps(0);
         de2.setDurationSeconds(60);
         dayExerciseDAO.create(de2);
-
-        System.out.println("Database populated successfully!");
-    }
-
-    public static void main(String[] args) {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        DBPopulator dbPopulator = new DBPopulator(emf);
-        dbPopulator.populate();
     }
 }

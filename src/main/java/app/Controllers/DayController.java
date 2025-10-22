@@ -5,12 +5,20 @@ import app.services.DayService;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class DayController implements IController {
 
     private final DayService dayService;
+
+    // Logger til generel logging
+    private static final Logger logger = LoggerFactory.getLogger(DayController.class);
+
+    // Logger til debug-specifik information (kan bruges til tracing)
+    private static final Logger debugLogger = LoggerFactory.getLogger("app");
 
     public DayController(DayService dayService) {
         this.dayService = dayService;
