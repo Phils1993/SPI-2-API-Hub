@@ -1,5 +1,6 @@
 package DAO;
 
+import PopulatorTest.PopulatorTest;
 import app.config.HibernateConfig;
 import app.daos.DayDAO;
 import app.daos.WeekDAO;
@@ -7,7 +8,7 @@ import app.entities.Day;
 import app.entities.Week;
 import app.eums.Difficulty;
 import app.exceptions.ApiException;
-import app.populator.DBPopulator;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -22,31 +23,28 @@ class DayDAOTest {
     private static EntityManagerFactory emf;
     private DayDAO dayDAO;
     private WeekDAO weekDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
-    void setupClass() {
+    void setupAll() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
-        dayDAO = DayDAO.getInstance(emf);
-        weekDAO = WeekDAO.getInstance(emf);
-    }
+        dayDAO = new DayDAO(emf);
+        weekDAO = new WeekDAO(emf);
 
-    @AfterAll
-    void tearDown() {
-        if (emf != null && emf.isOpen()) emf.close();
-    }
+        // TRUNCATE all relevant tables before tests
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createNativeQuery("TRUNCATE TABLE day_exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE day RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE week RESTART IDENTITY CASCADE").executeUpdate();
+            em.createNativeQuery("TRUNCATE TABLE exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.getTransaction().commit();
+        }
 
-    @BeforeEach
-    void setup() {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM DayExercise").executeUpdate();
-        em.createQuery("DELETE FROM Day").executeUpdate();
-        em.createQuery("DELETE FROM Week").executeUpdate();
-        em.createQuery("DELETE FROM Exercise").executeUpdate();
-        em.getTransaction().commit();
-        em.close();
+        // Populate database after truncation:
+        populatorTest = new PopulatorTest(emf);
+        populatorTest.populate();
 
-        new DBPopulator(emf).populate();
     }
 
     @Test
