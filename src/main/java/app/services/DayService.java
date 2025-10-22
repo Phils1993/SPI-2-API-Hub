@@ -13,7 +13,7 @@ public class DayService {
     private final DayDAO dayDAO;
 
     public DayService(EntityManagerFactory emf) {
-        this.dayDAO = DayDAO.getInstance(emf);
+        this.dayDAO = new DayDAO(emf);
     }
     public DayDTO create(DayDTO dto, int weekId) {
         Day day = DayMapper.toEntity(dto);

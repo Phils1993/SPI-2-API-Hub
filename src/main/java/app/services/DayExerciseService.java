@@ -21,9 +21,9 @@ public class DayExerciseService {
     private final ExerciseDAO exerciseDAO;
 
     public DayExerciseService(EntityManagerFactory emf) {
-        this.dayExerciseDAO = DayExerciseDAO.getInstance(emf);
-        this.dayDAO = DayDAO.getInstance(emf);
-        this.exerciseDAO = ExerciseDAO.getInstance(emf);
+        this.dayExerciseDAO = new DayExerciseDAO(emf);
+        this.exerciseDAO = new ExerciseDAO(emf);
+        this.dayDAO = new DayDAO(emf);
     }
 
     public DayExerciseDTO addExerciseToDay(DayExerciseDTO dto, int dayId, int exerciseId) {

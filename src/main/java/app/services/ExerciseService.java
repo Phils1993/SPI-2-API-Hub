@@ -13,7 +13,7 @@ public class ExerciseService {
     private final ExerciseDAO exerciseDAO;
 
     public ExerciseService(EntityManagerFactory emf) {
-        this.exerciseDAO = ExerciseDAO.getInstance(emf);
+        this.exerciseDAO = new ExerciseDAO(emf);
     }
 
     public ExerciseDTO getById(int id) {

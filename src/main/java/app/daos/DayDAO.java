@@ -10,19 +10,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DayDAO implements IDAO<Day, Integer>{
-    private static EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
-    private static DayDAO instance;
-
-    public static DayDAO getInstance(EntityManagerFactory _emf) {
-        if(instance == null){
-            emf = _emf;
-            instance = new DayDAO();
-        }
-        return instance;
+    public DayDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
+
     public Day Create(Day day, int weekId) {
         try(EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();

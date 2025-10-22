@@ -8,16 +8,12 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class ExerciseDAO implements IDAO<Exercise,Integer>{
-    private static EntityManagerFactory emf;
-    private static ExerciseDAO instance;
+    private final EntityManagerFactory emf;
 
-    public static ExerciseDAO getInstance(EntityManagerFactory _emf) {
-        if (instance == null) {
-            emf = _emf;
-            instance = new ExerciseDAO();
-        }
-        return instance;
+    public ExerciseDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
+
 
     @Override
     public Exercise create(Exercise exercise) {

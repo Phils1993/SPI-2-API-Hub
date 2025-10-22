@@ -13,7 +13,7 @@ public class WeekService {
     private final WeekDAO weekDAO;
 
     public WeekService(EntityManagerFactory emf) {
-        this.weekDAO = WeekDAO.getInstance(emf);
+        this.weekDAO = new WeekDAO(emf);
     }
 
     public WeekDTO create(WeekDTO dto) {

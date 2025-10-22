@@ -12,15 +12,10 @@ import java.util.List;
 
 public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
 
-    private static EntityManagerFactory emf;
-    private static DayExerciseDAO instance;
+    private final EntityManagerFactory emf;
 
-    public static DayExerciseDAO getInstance(EntityManagerFactory _emf) {
-        if (instance == null) {
-            emf = _emf;
-            instance = new DayExerciseDAO();
-        }
-        return instance;
+    public DayExerciseDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     @Override

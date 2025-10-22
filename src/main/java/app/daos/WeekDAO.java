@@ -8,16 +8,12 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class WeekDAO implements IDAO<Week,Integer> {
-    private static EntityManagerFactory emf;
-    private static WeekDAO instance;
+    private final EntityManagerFactory emf;
 
-    public static WeekDAO getInstance(EntityManagerFactory _emf) {
-        if (instance == null) {
-            emf = _emf;
-            instance = new WeekDAO();
-        }
-        return instance;
+    public WeekDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
+
 
     @Override
     public Week create(Week week) {
