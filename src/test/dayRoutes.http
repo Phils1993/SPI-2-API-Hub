@@ -3,7 +3,7 @@ POST http://localhost:7076/api/v1/day
 Content-Type: application/json
 
 {
-  "weekId": 3,
+  "weekId": 1,
   "dayName": "Monday",
   "workoutType": "Strength",
   "difficulty": "NORMAL",

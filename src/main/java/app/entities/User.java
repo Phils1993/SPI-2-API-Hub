@@ -1,6 +1,6 @@
 package app.entities;
 
-import app.security.ISecurityUser;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -12,7 +12,6 @@ import java.util.Set;
 
 /**
  * Purpose: To handle security in the API
- * Author: Thomas Hartmann
  */
 @Entity
 @Table(name = "users")
@@ -22,20 +21,25 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User implements Serializable, ISecurityUser {
+public class User implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @Basic(optional = false)
-    @Column(name = "username", length = 25)
-    private String username;
+    @Column(name = "user_name", length = 25)
+    @JsonProperty("username")
+    private String userName;
+
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
 
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
+    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name"
+            , referencedColumnName = "user_name")}
+            , inverseJoinColumns = {@JoinColumn(name = "role_name"
+            , referencedColumnName = "role_name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Role> roles = new HashSet<>();
 
@@ -54,14 +58,13 @@ public class User implements Serializable, ISecurityUser {
         return BCrypt.checkpw(pw, this.password);
     }
 
-
     public User(String userName, String userPass) {
-        this.username = userName;
+        this.userName = userName;
         this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
     public User(String userName, Set<Role> roleEntityList) {
-        this.username = userName;
+        this.userName = userName;
         this.roles = roleEntityList;
     }
 

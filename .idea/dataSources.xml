@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="sp2_fitness_api@localhost" uuid="e0ef5246-8e23-439f-939f-f364b29cb71b">
+    <data-source source="LOCAL" name="sp2_fitness_api@localhost" uuid="cde2f800-00f3-4440-b834-b0a6b77248d2">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>

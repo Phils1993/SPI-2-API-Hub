@@ -2,22 +2,22 @@
 GET {{url}}/auth/test/
 
 ### Populate the database with some data
-GET {{url}}/hotels/populate/
+//GET {{url}}//populate/
 
 ### Create a new user - this one will only get a USER role by default
 POST {{url}}/auth/register/
 
 {
-    "username": "user",
-    "password": "test123"
+    "username": "Gruppe18",
+    "password": "pass12345"
 }
 
 ###
 POST {{url}}/auth/login/
 
 {
-    "username": "user",
-    "password": "test123"
+    "username": "Gruppe18",
+    "password": "pass12345"
 }
 
 > {%
@@ -28,7 +28,7 @@ POST {{url}}/auth/login/
 ###
 GET {{url}}/protected/user_demo/
 Accept: application/json
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInBoaWxpcDE5OTNcIiIsInN1YiI6IkdydXBwZTE4IiwiZXhwIjoxNzYxMTMxOTE3LCJyb2xlcyI6IlVzZXIiLCJ1c2VybmFtZSI6IkdydXBwZTE4In0.Z3u-L1nJOnIYfAgJn8ieM8_f8foLE_sH1eyLyh7O1ZY
 
 ###
 GET {{url}}/protected/admin_demo/

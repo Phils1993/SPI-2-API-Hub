@@ -51,7 +51,7 @@ public class SecurityController implements ISecurityController {
 
                 // Lav rollerne om til Strings (f.eks. "USER", "ADMIN")
                 Set<String> stringRoles = verified.getRoles().stream()
-                        .map(Role::getRole)
+                        .map(Role::getRoleName)
                         .collect(Collectors.toSet());
 
                 System.out.println("Successfully logged in " + verified.getUserName());
@@ -72,6 +72,7 @@ public class SecurityController implements ISecurityController {
                 ctx.json(on).status(200);
 
             } catch (Exception e) {
+                e.printStackTrace();
                 // Hvis login fejler, smid fejl
                 throw new ValidationException("No user logged in");
             }
@@ -93,10 +94,10 @@ public class SecurityController implements ISecurityController {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
 
-                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
+                String token = createToken(new UserDTO(created.getUserName(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
-                        .put("username", created.getUsername()));
+                        .put("username", created.getUserName()));
             } catch (EntityExistsException e) {
                 ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                 ctx.json(returnObject.put("msg", "User already exists"));

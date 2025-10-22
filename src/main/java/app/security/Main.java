@@ -14,18 +14,18 @@ public class Main {
 
         ISecurityDAO dao = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
 
-        User user = dao.createUser("Grupp 18", "pass12345");
+        User user = dao.createUser("Gruppe18", "pass12345");
         System.out.println(user.getUserName()+": "+user.getPassword());
         Role role = dao.createRole("User");
 
         try {
-            User updatedUser = dao.addUserRole("Gruppe 18", "User");
+            User updatedUser = dao.addUserRole("Gruppe18", "User");
             System.out.println(updatedUser);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            User validatedUser = dao.getVerifiedUser("Gruppe 18", "pass12345");
+            User validatedUser = dao.getVerifiedUser("Gruppe18", "pass12345");
             System.out.println("User was validated: "+validatedUser.getUserName());
         } catch (ValidationException e) {
             e.printStackTrace();

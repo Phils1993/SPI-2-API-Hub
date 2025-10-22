@@ -20,7 +20,7 @@ public class SecurityDAO implements ISecurityDAO{
         try (EntityManager em = emf.createEntityManager()) {
             User foundUser = em.find(User.class, username);
             foundUser.getRoles();
-            if (foundUser.checkPassword(password)) {
+            if (foundUser.verifyPassword(password)) {
                 return foundUser;
             } else {
                 throw new ValidationException("Invalid username or password");
