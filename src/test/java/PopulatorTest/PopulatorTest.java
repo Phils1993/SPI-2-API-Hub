@@ -30,7 +30,7 @@ public class PopulatorTest {
     }
 
 
-    private void populate() {
+    public void populate() {
         // Create Exercises
         Exercise ex1 = new Exercise();
         ex1.setName("Push Up");

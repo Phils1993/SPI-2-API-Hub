@@ -10,7 +10,6 @@ import app.entities.DayExercise;
 import app.entities.DayExerciseKey;
 import app.entities.Exercise;
 import app.exceptions.ApiException;
-import app.populator.DBPopulator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -26,6 +25,7 @@ class DayExerciseDAOTest {
     private DayExerciseDAO dayExerciseDAO;
     private DayDAO dayDAO;
     private ExerciseDAO exerciseDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {

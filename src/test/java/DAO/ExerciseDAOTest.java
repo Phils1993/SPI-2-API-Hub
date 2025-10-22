@@ -20,6 +20,7 @@ class ExerciseDAOTest {
 
     private static EntityManagerFactory emf;
     private ExerciseDAO exerciseDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {

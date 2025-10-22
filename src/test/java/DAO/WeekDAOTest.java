@@ -19,6 +19,7 @@ class WeekDAOTest {
 
     private static EntityManagerFactory emf;
     private WeekDAO weekDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {
