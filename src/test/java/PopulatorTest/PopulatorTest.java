@@ -11,6 +11,7 @@ import app.entities.DayExercise;
 import app.entities.Exercise;
 import app.entities.Week;
 import app.eums.Difficulty;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 public class PopulatorTest {
@@ -30,7 +31,7 @@ public class PopulatorTest {
     }
 
 
-    private void populate() {
+    public void populate() {
         // Create Exercises
         Exercise ex1 = new Exercise();
         ex1.setName("Push Up");
@@ -82,9 +83,8 @@ public class PopulatorTest {
         day2.setWeek(week1);
         day2 = dayDAO.create(day2);
 
-        // Create DayExercises
+        // ✅ Create DayExercises WITHOUT manually setting IDs
         DayExercise de1 = new DayExercise();
-        de1.setId(new DayExerciseKey(day1.getId(), ex1.getId()));
         de1.setDay(day1);
         de1.setExercise(ex1);
         de1.setSets(4);
@@ -93,12 +93,13 @@ public class PopulatorTest {
         dayExerciseDAO.create(de1);
 
         DayExercise de2 = new DayExercise();
-        de2.setId(new DayExerciseKey(day2.getId(), ex3.getId()));
         de2.setDay(day2);
         de2.setExercise(ex3);
         de2.setSets(3);
         de2.setReps(0);
         de2.setDurationSeconds(60);
         dayExerciseDAO.create(de2);
+
+        System.out.println("Database populated successfully!");
     }
 }

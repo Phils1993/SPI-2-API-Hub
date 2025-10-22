@@ -20,6 +20,7 @@ class ExerciseDAOTest {
 
     private static EntityManagerFactory emf;
     private ExerciseDAO exerciseDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {
@@ -29,10 +30,10 @@ class ExerciseDAOTest {
         // TRUNCATE all relevant tables before tests
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.createNativeQuery("TRUNCATE TABLE day_exercise RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE day RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE week RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.createQuery("DELETE FROM DayExercise").executeUpdate();
+            em.createQuery("DELETE FROM Day").executeUpdate();
+            em.createQuery("DELETE FROM Week").executeUpdate();
+            em.createQuery("DELETE FROM Exercise").executeUpdate();
             em.getTransaction().commit();
         }
 

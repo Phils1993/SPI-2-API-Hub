@@ -18,6 +18,7 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
         this.emf = emf;
     }
 
+    /*
     @Override
    public DayExercise create(DayExercise dayExercise) {
         try (EntityManager em = emf.createEntityManager()) {
@@ -41,6 +42,33 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
         }
     }
 
+     */
+    @Override
+    public DayExercise create(DayExercise dayExercise) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // ✅ Reattach detached entities (important!)
+            if (!em.contains(dayExercise.getDay())) {
+                dayExercise.setDay(em.merge(dayExercise.getDay()));
+            }
+            if (!em.contains(dayExercise.getExercise())) {
+                dayExercise.setExercise(em.merge(dayExercise.getExercise()));
+            }
+
+            // ✅ Persist DayExercise safely
+            em.persist(dayExercise);
+            em.getTransaction().commit();
+
+            return dayExercise;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 
     @Override
     public DayExercise getById(int id) {

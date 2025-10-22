@@ -19,6 +19,7 @@ class WeekDAOTest {
 
     private static EntityManagerFactory emf;
     private WeekDAO weekDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {
@@ -28,10 +29,10 @@ class WeekDAOTest {
         // TRUNCATE all relevant tables before tests
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.createNativeQuery("TRUNCATE TABLE day_exercise RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE day RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE week RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.createQuery("DELETE FROM DayExercise").executeUpdate();
+            em.createQuery("DELETE FROM Day").executeUpdate();
+            em.createQuery("DELETE FROM Week").executeUpdate();
+            em.createQuery("DELETE FROM Exercise").executeUpdate();
             em.getTransaction().commit();
         }
 
@@ -51,17 +52,21 @@ class WeekDAOTest {
 
     @Test
     void testGetWeekById() {
-        List<Week> allWeeks = weekDAO.getAll();
-        assertThat(allWeeks, is(not(empty())));
+        // Find a week that has at least one day with exercises
+        Week weekWithExercises = weekDAO.getAll().stream()
+                .filter(w -> w.getDays().stream().anyMatch(d -> !d.getDayExercises().isEmpty()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No week with exercises found"));
 
-        Week week = weekDAO.getById(allWeeks.get(0).getId());
+        Week week = weekDAO.getById(weekWithExercises.getId());
 
         assertThat(week, is(notNullValue()));
         assertThat(week.getDays(), is(not(empty())));
-        assertThat(
-                week.getDays().stream().anyMatch(day -> !day.getDayExercises().isEmpty()),
-                is(true)
-        );
+
+        boolean hasExercises = week.getDays().stream()
+                .anyMatch(day -> !day.getDayExercises().isEmpty());
+
+        assertThat(hasExercises, is(true));
     }
 
     @Test

@@ -26,6 +26,7 @@ class DayExerciseDAOTest {
     private DayExerciseDAO dayExerciseDAO;
     private DayDAO dayDAO;
     private ExerciseDAO exerciseDAO;
+    private PopulatorTest populatorTest;
 
     @BeforeAll
     void setupAll() {
@@ -37,10 +38,10 @@ class DayExerciseDAOTest {
         // TRUNCATE all relevant tables before tests
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.createNativeQuery("TRUNCATE TABLE day_exercise RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE day RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE week RESTART IDENTITY CASCADE").executeUpdate();
-            em.createNativeQuery("TRUNCATE TABLE exercise RESTART IDENTITY CASCADE").executeUpdate();
+            em.createQuery("DELETE FROM DayExercise").executeUpdate();
+            em.createQuery("DELETE FROM Day").executeUpdate();
+            em.createQuery("DELETE FROM Week").executeUpdate();
+            em.createQuery("DELETE FROM Exercise").executeUpdate();
             em.getTransaction().commit();
         }
 
@@ -51,10 +52,21 @@ class DayExerciseDAOTest {
 
     @Test
     void testGetExercisesByDayId() {
-        Day day = dayDAO.getAll().get(0);
-        List<DayExercise> exercises = dayExerciseDAO.getExercisesByDayId(day.getId());
+        // Find a day that actually has exercises
+        Day dayWithExercises = dayDAO.getAll().stream()
+                .filter(d -> !d.getDayExercises().isEmpty())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No day with exercises found"));
+
+        List<DayExercise> exercises = dayExerciseDAO.getExercisesByDayId(dayWithExercises.getId());
+
+        // Assert that exercises were returned
         assertThat(exercises, is(not(empty())));
-        assertThat(exercises.get(0).getDay().getId(), equalTo(day.getId()));
+
+        // Assert that all exercises belong to the correct day
+        for (DayExercise de : exercises) {
+            assertThat(de.getDay().getId(), equalTo(dayWithExercises.getId()));
+        }
     }
 
     @Test
