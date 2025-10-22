@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "day_exercise")
 public class DayExercise {
     @EmbeddedId
     private DayExerciseKey id = new DayExerciseKey();
