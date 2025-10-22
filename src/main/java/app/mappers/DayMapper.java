@@ -15,6 +15,7 @@ public class DayMapper {
         dto.setWorkoutType(day.getWorkoutType());
         dto.setDifficulty(day.getDifficulty());
         dto.setTotalWorkoutTime(day.getTotalWorkoutTime());
+        dto.setWeekId(day.getWeek() != null ? day.getWeek().getId() : null);
 
         if (includedExercises && day.getDayExercises() != null)
             dto.setDayExercises(day.getDayExercises()

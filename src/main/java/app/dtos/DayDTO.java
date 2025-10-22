@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 
 public class DayDTO {
+    private Integer weekId;
     private Integer id;
     private String dayName;
     private String workoutType;
@@ -24,5 +25,4 @@ public class DayDTO {
 
     private List<DayExerciseDTO>dayExercises = new ArrayList<>();
 
-    private Integer weekId;
 }

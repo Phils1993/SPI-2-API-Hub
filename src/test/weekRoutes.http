@@ -10,3 +10,7 @@ Content-Type: application/json
 ### Get all weeks
 GET http://localhost:7076/api/v1/week
 Content-Type: application/json
+
+### Get week by id
+GET http://localhost:7076/api/v1/week/1
+Content-Type: application/json
