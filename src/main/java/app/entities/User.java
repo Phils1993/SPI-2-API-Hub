@@ -36,11 +36,12 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name"
-            , referencedColumnName = "user_name")}
-            , inverseJoinColumns = {@JoinColumn(name = "role_name"
-            , referencedColumnName = "role_name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "role_name")
+    )
     private Set<Role> roles = new HashSet<>();
 
     public Set<String> getRolesAsStrings() {
