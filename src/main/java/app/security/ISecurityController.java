@@ -10,7 +10,7 @@ public interface ISecurityController {
 
     Handler login(Context ctx); // to get a token
 
-    Handler register(Context ctx); // to get a user
+    Handler register(); // to get a user
 
     Handler authenticate(); // to verify roles inside token
 

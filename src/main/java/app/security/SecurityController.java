@@ -12,6 +12,7 @@ import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.TokenVerificationException;
 import dk.bugelhartmann.UserDTO;
 import io.javalin.http.*;
+import jakarta.persistence.EntityExistsException;
 
 import java.text.ParseException;
 import java.util.Map;
@@ -19,6 +20,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SecurityController implements ISecurityController {
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     // DAO til at snakke med databasen (bruges til at finde brugere og verificere login)
     ISecurityDAO securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
@@ -83,8 +86,22 @@ public class SecurityController implements ISecurityController {
 
     // Ikke implementeret (her kunne man lave brugeroprettelse)
     @Override
-    public Handler register(Context ctx) {
-        return null;
+    public Handler register() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
+                User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
+
+                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
+                ctx.status(HttpStatus.CREATED).json(returnObject
+                        .put("token", token)
+                        .put("username", created.getUsername()));
+            } catch (EntityExistsException e) {
+                ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
+                ctx.json(returnObject.put("msg", "User already exists"));
+            }
+        };
     }
 
     /**

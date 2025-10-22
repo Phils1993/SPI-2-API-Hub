@@ -1,51 +1,85 @@
 package app.entities;
 
+import app.security.ISecurityUser;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Purpose: To handle security in the API
+ * Author: Thomas Hartmann
+ */
 @Entity
+@Table(name = "users")
+@NamedQueries(@NamedQuery(name = "User.deleteAllRows", query = "DELETE from User"))
 @Getter
 @Setter
-@Table(name = "users")
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class User implements Serializable, ISecurityUser {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "user_name", nullable = false)
-    private String userName;
-    @Column(name = "password", nullable = false)
+    @Basic(optional = false)
+    @Column(name = "username", length = 25)
+    private String username;
+    @Basic(optional = false)
+    @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private Set<Role> roles = new HashSet<>();
 
-    public User() {
+    public Set<String> getRolesAsStrings() {
+        if (roles.isEmpty()) {
+            return null;
+        }
+        Set<String> rolesAsStrings = new HashSet<>();
+        roles.forEach((role) -> {
+            rolesAsStrings.add(role.getRoleName());
+        });
+        return rolesAsStrings;
     }
 
-    public User(String userName, String password) {
-        this.userName = userName;
-        String hashedPaaword = BCrypt.hashpw(password, BCrypt.gensalt(12));
-        this.password = hashedPaaword;
+    public boolean verifyPassword(String pw) {
+        return BCrypt.checkpw(pw, this.password);
     }
 
-    public boolean checkPassword(String candidate) {
-        // Check that an unencrypted password matches one that has
-        // previously been hashed
-        if (BCrypt.checkpw(candidate, password))
-            return true;
-        else
-            return false;
+
+    public User(String userName, String userPass) {
+        this.username = userName;
+        this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
+    }
+
+    public User(String userName, Set<Role> roleEntityList) {
+        this.username = userName;
+        this.roles = roleEntityList;
     }
 
     public void addRole(Role role) {
-        this.roles.add(role);
+        if (role == null) {
+            return;
+        }
+        roles.add(role);
         role.getUsers().add(this);
+    }
+
+    public void removeRole(String userRole) {
+        roles.stream()
+                .filter(role -> role.getRoleName().equals(userRole))
+                .findFirst()
+                .ifPresent(role -> {
+                    roles.remove(role);
+                    role.getUsers().remove(this);
+                });
     }
 }

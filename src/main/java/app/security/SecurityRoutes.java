@@ -1,5 +1,6 @@
 package app.security;
 
+import app.entities.Role;
 import app.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.apibuilder.EndpointGroup;
@@ -14,6 +15,7 @@ public class SecurityRoutes {
         return () -> {
             path("auth", () -> {
                 post("login", securityController.login());
+                post("/register", securityController.register(), Roles.ANYONE);
                 get("healthcheck", securityController::healthCheck, Roles.ANYONE);
             });
         };
