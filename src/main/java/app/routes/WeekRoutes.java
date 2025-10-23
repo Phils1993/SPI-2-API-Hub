@@ -1,6 +1,7 @@
 package app.routes;
 
 import app.Controllers.WeekController;
+import app.security.Roles;
 import app.services.WeekService;
 import io.javalin.apibuilder.EndpointGroup;
 
@@ -17,13 +18,13 @@ public class WeekRoutes {
     public EndpointGroup getRoutes() {
         return () -> {
             path("week", () -> {
-                post(weekController.create());
-                get(weekController.getAll());
+                post(weekController.create(), Roles.ADMIN);
+                get(weekController.getAll(), Roles.USER);
 
                 path("{id}", () -> {
-                    get(weekController.getById());
-                    put(weekController.update());
-                    delete(weekController.delete());
+                    get(weekController.getById(), Roles.USER);
+                    put(weekController.update(), Roles.ADMIN);
+                    delete(weekController.delete(), Roles.ADMIN);
                 });
             });
         };

@@ -2,6 +2,7 @@ package app.config;
 
 import app.exceptions.ApiException;
 import app.routes.WeekRoutes;
+import app.security.SecurityController;
 import app.services.WeekService;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
@@ -17,6 +18,10 @@ public class ApplicationConfig {
         RoutesRegistry routes = new RoutesRegistry(services);
 
         var app = Javalin.create(config -> configure(config, routes));
+
+        SecurityController securityController = new SecurityController();
+        app.beforeMatched(securityController.authenticate());
+        app.beforeMatched(securityController.authorize());
 
         // Register global exception handlers here if needed
 

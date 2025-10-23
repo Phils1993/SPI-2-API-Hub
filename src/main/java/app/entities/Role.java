@@ -26,7 +26,7 @@ public class Role implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "role_name", length = 20)
-    private String name;
+    private String role;
 
     @Getter
     @ToString.Exclude
@@ -36,15 +36,15 @@ public class Role implements Serializable {
     public Role() {}
 
     public Role(String roleName) {
-        this.name = roleName;
+        this.role = roleName;
     }
 
     public String getRoleName() {
-        return name;
+        return role;
     }
 
     @Override
     public String toString() {
-        return "Role{" + "roleName='" + name + '\'' + '}';
+        return "Role{" + "roleName='" + role + '\'' + '}';
     }
 }

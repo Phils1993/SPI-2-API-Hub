@@ -18,15 +18,21 @@ public class Main {
         System.out.println(user.getUserName()+": "+user.getPassword());
         Role role = dao.createRole("User");
 
+        User admin = dao.createUser("Admin", "pass12345");
+        System.out.println(admin.getUserName()+": "+admin.getPassword());
+        Role roleAdmin = dao.createRole("Admin");
+
         try {
             User updatedUser = dao.addUserRole("Gruppe18", "User");
             System.out.println(updatedUser);
+            User updatedAdmin = dao.addUserRole("Admin", "Admin");
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
         }
         try {
             User validatedUser = dao.getVerifiedUser("Gruppe18", "pass12345");
             System.out.println("User was validated: "+validatedUser.getUserName());
+            User validatedAdmin = dao.getVerifiedUser("Admin", "pass12345");
         } catch (ValidationException e) {
             e.printStackTrace();
         }

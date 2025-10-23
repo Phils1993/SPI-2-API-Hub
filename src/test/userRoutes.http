@@ -20,6 +20,14 @@ POST {{url}}/auth/login/
     "password": "pass12345"
 }
 
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "Admin",
+    "password": "pass12345"
+}
+
 > {%
     client.global.set("jwt_token", response.body.token);
     console.log("JWT Token:", client.global.get("jwt_token"));
@@ -28,7 +36,7 @@ POST {{url}}/auth/login/
 ###
 GET {{url}}/protected/user_demo/
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInBoaWxpcDE5OTNcIiIsInN1YiI6IkdydXBwZTE4IiwiZXhwIjoxNzYxMTMxOTE3LCJyb2xlcyI6IlVzZXIiLCJ1c2VybmFtZSI6IkdydXBwZTE4In0.Z3u-L1nJOnIYfAgJn8ieM8_f8foLE_sH1eyLyh7O1ZY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJWYWxkZW1hciBQb3Vsc2VuIiwic3ViIjoiR3J1cHBlMTgiLCJleHAiOjE3NjEyMTA0MjksInJvbGVzIjoiVVNFUiIsInVzZXJuYW1lIjoiR3J1cHBlMTgifQ.U0Jg9rsN2LVXP9bREsAYeGfPX6LH4HbAiIbmrgEPWRw
 
 ###
 GET {{url}}/protected/admin_demo/
