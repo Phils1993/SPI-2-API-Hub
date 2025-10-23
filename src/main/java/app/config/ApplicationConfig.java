@@ -2,21 +2,31 @@ package app.config;
 
 import app.exceptions.ApiException;
 import app.routes.WeekRoutes;
+import app.security.SecurityController;
 import app.services.WeekService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class ApplicationConfig {
     private static Javalin app;
+    private final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
+    private final ObjectMapper jsonMapper = new ObjectMapper();
 
     public static Javalin startServer(int port, EntityManagerFactory emf) {
         ServiceRegistry services = new ServiceRegistry(emf);
         RoutesRegistry routes = new RoutesRegistry(services);
 
         var app = Javalin.create(config -> configure(config, routes));
+        SecurityController securityController = new SecurityController();
+        app.beforeMatched(securityController.authenticate());
+        app.beforeMatched(securityController.authorize());
 
         // Register global exception handlers here if needed
 

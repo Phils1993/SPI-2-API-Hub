@@ -30,7 +30,7 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_name", length = 25)
     @JsonProperty("username")
-    private String userName;
+    private String username;
 
     @Basic(optional = false)
     @Column(name = "password")
@@ -59,13 +59,13 @@ public class User implements Serializable {
         return BCrypt.checkpw(pw, this.password);
     }
 
-    public User(String userName, String userPass) {
-        this.userName = userName;
+    public User(String username, String userPass) {
+        this.username = username;
         this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public User(String userName, Set<Role> roleEntityList) {
-        this.userName = userName;
+    public User(String username, Set<Role> roleEntityList) {
+        this.username = username;
         this.roles = roleEntityList;
     }
 

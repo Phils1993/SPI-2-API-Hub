@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 public class SecurityController implements ISecurityController {
 
-    ObjectMapper objectMapper = new ObjectMapper();
 
     // DAO til at snakke med databasen (bruges til at finde brugere og verificere login)
     ISecurityDAO securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
@@ -47,17 +46,17 @@ public class SecurityController implements ISecurityController {
             User user = ctx.bodyAsClass(User.class);
             try {
                 // Tjek i databasen om brugeren findes og password passer
-                User verified = securityDAO.getVerifiedUser(user.getUserName(), user.getPassword());
+                User verified = securityDAO.getVerifiedUser(user.getUsername(), user.getPassword());
 
                 // Lav rollerne om til Strings (f.eks. "USER", "ADMIN")
                 Set<String> stringRoles = verified.getRoles().stream()
                         .map(Role::getRoleName)
                         .collect(Collectors.toSet());
 
-                System.out.println("Successfully logged in " + verified.getUserName());
+                System.out.println("Successfully logged in " + verified.getUsername());
 
                 // Opret en DTO som bruges til token (indeholder username + roller)
-                UserDTO userDTO = new UserDTO(verified.getUserName(), stringRoles);
+                UserDTO userDTO = new UserDTO(verified.getUsername(), stringRoles);
 
                 // Lav et JWT token ud fra userDTO
                 String token = createToken(userDTO);
@@ -89,15 +88,15 @@ public class SecurityController implements ISecurityController {
     @Override
     public Handler register() {
         return (ctx) -> {
-            ObjectNode returnObject = objectMapper.createObjectNode();
+            ObjectNode returnObject = mapper.createObjectNode();
             try {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
 
-                String token = createToken(new UserDTO(created.getUserName(), Set.of("USER")));
+                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
-                        .put("username", created.getUserName()));
+                        .put("username", created.getUsername()));
             } catch (EntityExistsException e) {
                 ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                 ctx.json(returnObject.put("msg", "User already exists"));

@@ -28,12 +28,11 @@ POST {{url}}/auth/login/
 ###
 GET {{url}}/protected/user_demo/
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInBoaWxpcDE5OTNcIiIsInN1YiI6IkdydXBwZTE4IiwiZXhwIjoxNzYxMTMxOTE3LCJyb2xlcyI6IlVzZXIiLCJ1c2VybmFtZSI6IkdydXBwZTE4In0.Z3u-L1nJOnIYfAgJn8ieM8_f8foLE_sH1eyLyh7O1ZY
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInBoaWxpcDE5OTNcIiIsInN1YiI6IkdydXBwZTE4IiwiZXhwIjoxNzYxMjExOTcwLCJyb2xlcyI6IlVTRVIiLCJ1c2VybmFtZSI6IkdydXBwZTE4In0.FI_M4vTZ3MRJvasq2H7LJWWjLrM5sP5izpklcFn09XY
 ###
 GET {{url}}/protected/admin_demo/
 Accept: application/json
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInBoaWxpcDE5OTNcIiIsInN1YiI6IkdydXBwZTE4IiwiZXhwIjoxNzYxMjE1NzQ1LCJyb2xlcyI6IlVzZXIiLCJ1c2VybmFtZSI6IkdydXBwZTE4In0.Zqt0UvMtRqG61QfjlZhuhu_mWztRsE00qH4qptwFoPg
 
 ### Add admin role to user
 POST {{url}}/auth/user/addrole/
