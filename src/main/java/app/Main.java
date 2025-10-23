@@ -10,6 +10,6 @@ public class Main {
 
         ApplicationConfig.startServer(7076,emf);
 
-        //DELETE THIS COMMENT LATER, IT IS NOT IMPORTANT AT ALL
+        //DELETE THIS COMMENT LATER, IT IS NOT IMPORTANT AT ALL.
     }
 }
