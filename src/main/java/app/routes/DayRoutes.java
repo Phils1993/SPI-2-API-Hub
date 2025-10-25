@@ -1,6 +1,7 @@
 package app.routes;
 
 import app.Controllers.DayController;
+import app.security.Roles;
 import app.services.DayService;
 import io.javalin.apibuilder.EndpointGroup;
 
@@ -16,7 +17,14 @@ public class DayRoutes {
     public EndpointGroup getRoutes() {
         return () -> {
             path("day", () -> {
-                post(dayController.create());
+                // Public endpoints
+                get(dayController.getAll(), Roles.ANYONE);
+                get("{id}", dayController.getById(), Roles.USER);
+
+                // Admin-only endpoints
+                post(dayController.create(), Roles.ADMIN);
+                put("{id}", dayController.update(), Roles.ADMIN);
+                delete("{id}", dayController.delete(), Roles.ADMIN);
             });
         };
     }

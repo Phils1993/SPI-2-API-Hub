@@ -67,4 +67,11 @@ public class DayExerciseService {
         DayExerciseKey key = new DayExerciseKey(dayId, exerciseId);
         dayExerciseDAO.deleteByKey(key);
     }
+
+    public List<DayExerciseDTO> getAllDayExercises() {
+        return dayExerciseDAO.getAll()
+                .stream()
+                .map(DayExerciseMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

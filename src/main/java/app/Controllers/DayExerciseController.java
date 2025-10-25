@@ -8,6 +8,8 @@ import io.javalin.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class DayExerciseController implements IController{
     private final DayExerciseService dayExerciseService;
 
@@ -35,21 +37,40 @@ public class DayExerciseController implements IController{
 
     @Override
     public Handler getAll() {
-        return null;
+        return ctx -> {
+            List<DayExerciseDTO> allDayExercise = dayExerciseService.getAllDayExercises();
+            ctx.status(HttpStatus.OK).json(allDayExercise);
+        };
     }
 
     @Override
     public Handler update() {
-        return null;
+        return ctx -> {
+            int dayId = Integer.parseInt(ctx.pathParam("dayId"));
+            int exerciseId = Integer.parseInt(ctx.pathParam("exerciseId"));
+            DayExerciseDTO updatedDTO = ctx.bodyAsClass(DayExerciseDTO.class);
+
+            DayExerciseDTO updatedDay = dayExerciseService.updateDayExercise(dayId, exerciseId, updatedDTO);
+            ctx.status(HttpStatus.OK).json(updatedDay);
+        };
     }
 
     @Override
     public Handler delete() {
-        return null;
+        return ctx -> {
+            int dayId = Integer.parseInt(ctx.pathParam("id"));
+            int exerciseId = Integer.parseInt(ctx.pathParam("exerciseId"));
+            dayExerciseService.removeExerciseFromDay(dayId, exerciseId);
+            ctx.status(HttpStatus.NO_CONTENT).result("DayExercise deleted successfully");
+        };
     }
 
     @Override
     public Handler getById() {
-        return null;
+        return ctx -> {
+            int dayId = Integer.parseInt(ctx.pathParam("id"));
+            List<DayExerciseDTO> dayExercise = dayExerciseService.getExercisesForDay(dayId);
+            ctx.status(HttpStatus.OK).json(dayExercise);
+        };
     }
 }

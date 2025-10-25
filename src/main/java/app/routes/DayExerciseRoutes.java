@@ -1,11 +1,11 @@
 package app.routes;
 
 import app.Controllers.DayExerciseController;
+import app.security.Roles;
 import app.services.DayExerciseService;
 import io.javalin.apibuilder.EndpointGroup;
 
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.post;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class DayExerciseRoutes {
     private final DayExerciseController dayExerciseController;
@@ -17,7 +17,14 @@ public class DayExerciseRoutes {
     public EndpointGroup getRoutes(){
         return () -> {
             path("dayExercise", () -> {
-                post(dayExerciseController.create());
+                // Public endpoints
+                get(dayExerciseController.getAll(), Roles.ANYONE);
+                get("{id}", dayExerciseController.getById(), Roles.USER);
+
+                // Admin-only endpoints
+                post(dayExerciseController.create(), Roles.ADMIN);
+                put("{dayId}/{exerciseId}", dayExerciseController.update(), Roles.ADMIN);
+                delete("{id}/{exerciseId}", dayExerciseController.delete(), Roles.ADMIN);
             });
         };
     }
