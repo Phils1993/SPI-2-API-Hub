@@ -16,5 +16,7 @@ public class Main {
         ApplicationConfig.startServer(7070,emf);
 
         //DELETE THIS COMMENT LATER, IT IS NOT IMPORTANT AT ALL.
+
+        //
     }
 }
