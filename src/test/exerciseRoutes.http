@@ -1,0 +1,32 @@
+### Create an exercise
+POST http://localhost:7000/api/exercises
+Content-Type: application/json
+
+{
+  "name": "Bench Press",
+  "description": "Chest exercise using barbell",
+  "muscleGroup": "Chest",
+  "equipment": "Barbell",
+  "difficulty": "MEDIUM"
+}
+
+### Get all exercises
+GET http://localhost:7000/api/exercises
+
+### Get exercise by ID
+GET http://localhost:7000/api/exercises/1
+
+### Update exercise
+PUT http://localhost:7000/api/exercises/1
+Content-Type: application/json
+
+{
+  "name": "Incline Bench Press",
+  "description": "Chest exercise on incline bench",
+  "muscleGroup": "Chest",
+  "equipment": "Barbell",
+  "difficulty": "HARD"
+}
+
+### Delete exercise
+DELETE http://localhost:7000/api/exercises/1

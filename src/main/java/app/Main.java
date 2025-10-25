@@ -6,7 +6,9 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {
+
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+
 
 
         //TODO: Remember to fill the DB, put in a user from secrurity.main
