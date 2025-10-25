@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*;
 class DayServiceTest {
 
     private EntityManagerFactory emf;
-    private DayService service;
+    private DayService dayService;
 
     @BeforeAll
     void setup() {
@@ -26,7 +26,7 @@ class DayServiceTest {
         DBPopulator populator = new DBPopulator(emf);
         populator.populate();
 
-        service = new DayService(emf);
+        dayService = new DayService(emf);
     }
 
     @BeforeEach
@@ -52,32 +52,32 @@ class DayServiceTest {
 
         int weekId = getFirstWeekIdFromDB();
 
-        DayDTO created = service.create(dto, weekId);
+        DayDTO created = dayService.create(dto, weekId);
         assertThat(created.getId(), is(notNullValue()));
         assertThat(created.getDayName(), equalTo("TestDay"));
 
         // Verify persisted
-        DayDTO fetched = service.getById(created.getId());
+        DayDTO fetched = dayService.getById(created.getId());
         assertThat(fetched.getDayName(), equalTo("TestDay"));
     }
 
     @Test
     void getAll_returnsList() {
-        List<DayDTO> days = service.getAll();
+        List<DayDTO> days = dayService.getAll();
         assertThat(days, is(not(empty())));
     }
 
     @Test
     void updateDay_updatesSuccessfully() {
-        DayDTO existingDay = service.getAll().get(0);
+        DayDTO existingDay = dayService.getAll().get(0);
 
         DayDTO dto = new DayDTO();
         dto.setDayName("UpdatedDay");
 
-        DayDTO updated = service.update(dto, existingDay.getId());
+        DayDTO updated = dayService.update(dto, existingDay.getId());
         assertThat(updated.getDayName(), equalTo("UpdatedDay"));
 
-        DayDTO fetched = service.getById(existingDay.getId());
+        DayDTO fetched = dayService.getById(existingDay.getId());
         assertThat(fetched.getDayName(), equalTo("UpdatedDay"));
     }
 
@@ -85,14 +85,14 @@ class DayServiceTest {
     void deleteDay_removesSuccessfully() {
         int weekId = getFirstWeekIdFromDB();
 
-        DayDTO day = service.create(new DayDTO(){{
+        DayDTO day = dayService.create(new DayDTO(){{
             setDayName("ToDelete");
             setWorkoutType("Test");
         }}, weekId);
 
-        service.delete(day.getId());
+        dayService.delete(day.getId());
         ApiException ex = Assertions.assertThrows(ApiException.class,
-                () -> service.getById(day.getId()));
+                () -> dayService.getById(day.getId()));
         assertThat(ex.getStatusCode(), equalTo(404));
     }
 }

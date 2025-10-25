@@ -1,11 +1,38 @@
-### Create exercise for day
-POST http://localhost:7076/api/v1/dayExercise
+### Create DayExercise (Admin only)
+POST {{url}}/dayExercise
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
-  "dayId": 3,
-  "exerciseId": 1,
+  "dayId": 1,
+  "exerciseId": 2,
   "sets": 3,
   "reps": 12,
   "durationSeconds": 60
 }
+
+### Get all DayExercises (Public)
+GET {{url}}/dayExercise
+Content-Type: application/json
+
+### Get DayExercises for a specific day (User role or higher)
+GET {{url}}/dayExercise/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Update a DayExercise (Admin only)
+PUT {{url}}/dayExercise/1/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "dayId": 1,
+  "exerciseId": 2,
+  "sets": 4,
+  "reps": 15,
+  "durationSeconds": 90
+}
+
+### Delete a DayExercise (Admin only)
+DELETE {{url}}/dayExercise/1/2
+Authorization: Bearer {{jwt_token}}

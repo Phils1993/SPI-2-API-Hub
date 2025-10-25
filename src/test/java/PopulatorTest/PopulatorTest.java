@@ -1,6 +1,5 @@
 package PopulatorTest;
 
-import app.entities.DayExerciseKey;
 import app.config.HibernateConfig;
 import app.daos.DayDAO;
 import app.daos.DayExerciseDAO;
@@ -11,7 +10,6 @@ import app.entities.DayExercise;
 import app.entities.Exercise;
 import app.entities.Week;
 import app.eums.Difficulty;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 public class PopulatorTest {
@@ -20,20 +18,26 @@ public class PopulatorTest {
     private final DayDAO dayDAO;
     private final ExerciseDAO exerciseDAO;
     private final DayExerciseDAO dayExerciseDAO;
-    private final EntityManagerFactory emf;
+
+    //  Keep references so tests can use them
+    public Exercise ex1;
+    public Exercise ex2;
+    public Exercise ex3;
+    public Week week1;
+    public Week week2;
+    public Day day1;
+    public Day day2;
 
     public PopulatorTest(EntityManagerFactory emf) {
-        this.emf = emf;
         this.weekDAO = new WeekDAO(emf);
         this.dayDAO = new DayDAO(emf);
         this.exerciseDAO = new ExerciseDAO(emf);
         this.dayExerciseDAO = new DayExerciseDAO(emf);
     }
 
-
     public void populate() {
         // Create Exercises
-        Exercise ex1 = new Exercise();
+        ex1 = new Exercise();
         ex1.setName("Push Up");
         ex1.setDescription("Upper body strength");
         ex1.setMuscleGroup("Chest");
@@ -41,7 +45,7 @@ public class PopulatorTest {
         ex1.setDifficulty(Difficulty.NORMAL);
         ex1 = exerciseDAO.create(ex1);
 
-        Exercise ex2 = new Exercise();
+        ex2 = new Exercise();
         ex2.setName("Squat");
         ex2.setDescription("Lower body strength");
         ex2.setMuscleGroup("Legs");
@@ -49,7 +53,7 @@ public class PopulatorTest {
         ex2.setDifficulty(Difficulty.EASY);
         ex2 = exerciseDAO.create(ex2);
 
-        Exercise ex3 = new Exercise();
+        ex3 = new Exercise();
         ex3.setName("Plank");
         ex3.setDescription("Core stability");
         ex3.setMuscleGroup("Core");
@@ -58,16 +62,16 @@ public class PopulatorTest {
         ex3 = exerciseDAO.create(ex3);
 
         // Create Weeks
-        Week week1 = new Week();
+        week1 = new Week();
         week1.setWeekNumber(1);
         week1 = weekDAO.create(week1);
 
-        Week week2 = new Week();
+        week2 = new Week();
         week2.setWeekNumber(2);
         week2 = weekDAO.create(week2);
 
         // Create Days for Week 1
-        Day day1 = new Day();
+        day1 = new Day();
         day1.setDayName("Monday");
         day1.setWorkoutType("Strength");
         day1.setTotalWorkoutTime(60);
@@ -75,7 +79,7 @@ public class PopulatorTest {
         day1.setWeek(week1);
         day1 = dayDAO.create(day1);
 
-        Day day2 = new Day();
+        day2 = new Day();
         day2.setDayName("Wednesday");
         day2.setWorkoutType("Cardio");
         day2.setTotalWorkoutTime(45);
@@ -83,7 +87,7 @@ public class PopulatorTest {
         day2.setWeek(week1);
         day2 = dayDAO.create(day2);
 
-        // ✅ Create DayExercises WITHOUT manually setting IDs
+        // Create DayExercises
         DayExercise de1 = new DayExercise();
         de1.setDay(day1);
         de1.setExercise(ex1);
@@ -101,5 +105,8 @@ public class PopulatorTest {
         dayExerciseDAO.create(de2);
 
         System.out.println("Database populated successfully!");
+        System.out.println("Exercise IDs: " + ex1.getId() + ", " + ex2.getId() + ", " + ex3.getId());
+        System.out.println("Week IDs: " + week1.getId() + ", " + week2.getId());
+        System.out.println("Day IDs: " + day1.getId() + ", " + day2.getId());
     }
 }

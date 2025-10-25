@@ -7,7 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class ExerciseDAO implements IDAO<Exercise,Integer>{
+public class ExerciseDAO implements IDAO<Exercise, Integer> {
     private final EntityManagerFactory emf;
 
     public ExerciseDAO(EntityManagerFactory emf) {
@@ -59,9 +59,10 @@ public class ExerciseDAO implements IDAO<Exercise,Integer>{
             existing.setEquipment(updatedExercise.getEquipment());
             existing.setDifficulty(updatedExercise.getDifficulty());
 
-            em.merge(existing);
             em.getTransaction().commit();
             return existing;
+        } catch (ApiException ae) {
+            throw ae;
         } catch (Exception ex) {
             throw new ApiException(500, "Error updating exercise: " + ex.getMessage());
         }
@@ -75,6 +76,8 @@ public class ExerciseDAO implements IDAO<Exercise,Integer>{
             if (existing == null) throw new ApiException(404, "Exercise not found");
             em.remove(existing);
             em.getTransaction().commit();
+        } catch (ApiException ae) {
+            throw ae;
         } catch (Exception ex) {
             throw new ApiException(500, "Error deleting exercise: " + ex.getMessage());
         }

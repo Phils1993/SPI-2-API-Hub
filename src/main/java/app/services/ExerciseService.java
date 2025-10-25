@@ -16,6 +16,13 @@ public class ExerciseService {
         this.exerciseDAO = new ExerciseDAO(emf);
     }
 
+    public ExerciseDTO create(ExerciseDTO dto) {
+        Exercise entity = ExerciseMapper.toEntity(dto);
+        Exercise saved = exerciseDAO.create(entity);
+        return ExerciseMapper.toDTO(saved);
+    }
+
+
     public ExerciseDTO getById(int id) {
         Exercise exercise = exerciseDAO.getById(id);
         return ExerciseMapper.toDTO(exercise);

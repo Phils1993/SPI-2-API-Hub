@@ -60,7 +60,6 @@ public class WeekDAO implements IDAO<Week,Integer> {
             if (existing == null) throw new ApiException(404, "Week not found");
 
             existing.setWeekNumber(updatedWeek.getWeekNumber());
-            em.merge(existing);
             em.getTransaction().commit();
             return existing;
         } catch (Exception ex) {

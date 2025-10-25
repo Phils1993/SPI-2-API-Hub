@@ -1,10 +1,9 @@
 package Service;
 
+import PopulatorTest.PopulatorTest;
 import app.config.HibernateConfig;
-import app.dtos.DayDTO;
 import app.dtos.DayExerciseDTO;
 import app.exceptions.ApiException;
-import app.populator.DBPopulator;
 import app.services.DayExerciseService;
 import app.services.DayService;
 import jakarta.persistence.EntityManagerFactory;
@@ -19,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 class DayExerciseServiceTest {
 
     private EntityManagerFactory emf;
-    private DayExerciseService service;
+    private DayExerciseService dayExerciseService;
     private DayService dayService;
 
     private int testDayId;
@@ -29,10 +28,10 @@ class DayExerciseServiceTest {
     void setup() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        DBPopulator populator = new DBPopulator(emf);
-        populator.populate();
+        PopulatorTest populatorTest = new PopulatorTest(emf);
+        populatorTest.populate();
 
-        service = new DayExerciseService(emf);
+        dayExerciseService = new DayExerciseService(emf);
         dayService = new DayService(emf);
 
         // Grab a dynamic Day ID
@@ -53,8 +52,8 @@ class DayExerciseServiceTest {
 
     @BeforeEach
     void cleanDayExercises() {
-        List<DayExerciseDTO> existing = service.getExercisesForDay(testDayId);
-        existing.forEach(e -> service.removeExerciseFromDay(testDayId, e.getExerciseId()));
+        List<DayExerciseDTO> existing = dayExerciseService.getExercisesForDay(testDayId);
+        existing.forEach(e -> dayExerciseService.removeExerciseFromDay(testDayId, e.getExerciseId()));
     }
 
     @Test
@@ -64,7 +63,7 @@ class DayExerciseServiceTest {
         dto.setReps(10);
         dto.setDurationSeconds(60);
 
-        DayExerciseDTO result = service.addExerciseToDay(dto, testDayId, testExerciseId);
+        DayExerciseDTO result = dayExerciseService.addExerciseToDay(dto, testDayId, testExerciseId);
 
         assertThat(result, is(notNullValue()));
         assertThat(result.getSets(), equalTo(3));
@@ -72,7 +71,7 @@ class DayExerciseServiceTest {
         assertThat(result.getExerciseId(), equalTo(testExerciseId));
 
         // Verify persisted
-        List<DayExerciseDTO> persisted = service.getExercisesForDay(testDayId);
+        List<DayExerciseDTO> persisted = dayExerciseService.getExercisesForDay(testDayId);
         assertThat(persisted, hasItem(allOf(
                 hasProperty("dayId", equalTo(testDayId)),
                 hasProperty("exerciseId", equalTo(testExerciseId)),
@@ -90,9 +89,22 @@ class DayExerciseServiceTest {
         dto.setDurationSeconds(60);
 
         ApiException ex = Assertions.assertThrows(ApiException.class,
-                () -> service.addExerciseToDay(dto, 9999, testExerciseId));
+                () -> dayExerciseService.addExerciseToDay(dto, 9999, testExerciseId));
         assertThat(ex.getStatusCode(), equalTo(404));
         assertThat(ex.getMessage(), containsString("Day not found"));
+    }
+
+    @Test
+    void addExerciseToDay_throwsWhenExerciseNotFound() {
+        DayExerciseDTO dto = new DayExerciseDTO();
+        dto.setSets(3);
+        dto.setReps(10);
+        dto.setDurationSeconds(60);
+
+        ApiException ex = Assertions.assertThrows(ApiException.class,
+                () -> dayExerciseService.addExerciseToDay(dto, testDayId, 9999));
+        assertThat(ex.getStatusCode(), equalTo(404));
+        assertThat(ex.getMessage(), containsString("Exercise not found"));
     }
 
     @Test
@@ -101,10 +113,23 @@ class DayExerciseServiceTest {
         dto.setSets(2);
         dto.setReps(5);
         dto.setDurationSeconds(30);
-        service.addExerciseToDay(dto, testDayId, testExerciseId);
+        dayExerciseService.addExerciseToDay(dto, testDayId, testExerciseId);
 
-        List<DayExerciseDTO> exercises = service.getExercisesForDay(testDayId);
+        List<DayExerciseDTO> exercises = dayExerciseService.getExercisesForDay(testDayId);
         assertThat(exercises, is(not(empty())));
+    }
+
+    @Test
+    void getAllDayExercises_returnsAll() {
+        DayExerciseDTO dto = new DayExerciseDTO();
+        dto.setSets(1);
+        dto.setReps(8);
+        dto.setDurationSeconds(45);
+        dayExerciseService.addExerciseToDay(dto, testDayId, testExerciseId);
+
+        List<DayExerciseDTO> all = dayExerciseService.getAllDayExercises();
+        assertThat(all, is(not(empty())));
+        assertThat(all.stream().anyMatch(e -> e.getDayId() == testDayId), is(true));
     }
 
     @Test
@@ -113,20 +138,20 @@ class DayExerciseServiceTest {
         dto.setSets(2);
         dto.setReps(5);
         dto.setDurationSeconds(30);
-        service.addExerciseToDay(dto, testDayId, testExerciseId);
+        dayExerciseService.addExerciseToDay(dto, testDayId, testExerciseId);
 
         DayExerciseDTO updateDto = new DayExerciseDTO();
         updateDto.setSets(5);
         updateDto.setReps(15);
         updateDto.setDurationSeconds(120);
 
-        DayExerciseDTO updated = service.updateDayExercise(testDayId, testExerciseId, updateDto);
+        DayExerciseDTO updated = dayExerciseService.updateDayExercise(testDayId, testExerciseId, updateDto);
 
         assertThat(updated.getSets(), equalTo(5));
         assertThat(updated.getReps(), equalTo(15));
         assertThat(updated.getDurationSeconds(), equalTo(120));
 
-        DayExerciseDTO persisted = service.getExercisesForDay(testDayId).get(0);
+        DayExerciseDTO persisted = dayExerciseService.getExercisesForDay(testDayId).get(0);
         assertThat(persisted.getSets(), equalTo(5));
     }
 
@@ -136,12 +161,20 @@ class DayExerciseServiceTest {
         dto.setSets(2);
         dto.setReps(5);
         dto.setDurationSeconds(30);
-        service.addExerciseToDay(dto, testDayId, testExerciseId);
+        dayExerciseService.addExerciseToDay(dto, testDayId, testExerciseId);
 
-        service.removeExerciseFromDay(testDayId, testExerciseId);
+        dayExerciseService.removeExerciseFromDay(testDayId, testExerciseId);
 
-        List<DayExerciseDTO> exercises = service.getExercisesForDay(testDayId);
+        List<DayExerciseDTO> exercises = dayExerciseService.getExercisesForDay(testDayId);
         assertThat(exercises.stream()
                 .noneMatch(e -> e.getExerciseId() == testExerciseId), is(true));
+    }
+
+    @Test
+    void removeExerciseFromDay_throwsWhenNotExists() {
+        ApiException ex = Assertions.assertThrows(ApiException.class,
+                () -> dayExerciseService.removeExerciseFromDay(testDayId, 9999));
+        assertThat(ex.getStatusCode(), equalTo(404));
+        assertThat(ex.getMessage(), containsString("DayExercise not found"));
     }
 }

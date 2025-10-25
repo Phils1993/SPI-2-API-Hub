@@ -1,9 +1,7 @@
 package app.daos;
 
-import app.entities.Day;
 import app.entities.DayExercise;
 import app.entities.DayExerciseKey;
-import app.entities.Exercise;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -122,7 +120,7 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
             existing.setReps(updated.getReps());
             existing.setDurationSeconds(updated.getDurationSeconds());
 
-            em.merge(existing);
+
             em.getTransaction().commit();
             return existing;
         } catch (Exception ex) {
@@ -141,6 +139,8 @@ public class DayExerciseDAO implements IDAO<DayExercise, DayExerciseKey> {
             if (existing == null) throw new ApiException(404, "DayExercise not found");
             em.remove(existing);
             em.getTransaction().commit();
+        } catch (ApiException ae) {
+            throw ae;
         } catch (Exception ex) {
             throw new ApiException(500, "Error deleting day-exercise: " + ex.getMessage());
         }

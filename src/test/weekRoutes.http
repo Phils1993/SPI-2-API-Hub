@@ -1,5 +1,5 @@
 ### Create week
-POST http://localhost:7076/api/v1/week
+POST {{url}}/api/v1/week
 Content-Type: application/json
 
 {
@@ -8,9 +8,9 @@ Content-Type: application/json
 }
 
 ### Get all weeks
-GET http://localhost:7076/api/v1/week
+GET {{url}}/api/v1/week
 Content-Type: application/json
 
 ### Get week by id
-GET http://localhost:7076/api/v1/week/1
+GET {{url}}/api/v1/week/1
 Content-Type: application/json

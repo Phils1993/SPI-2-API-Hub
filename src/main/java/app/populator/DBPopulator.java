@@ -21,7 +21,6 @@ public class DBPopulator {
     private final DayExerciseDAO dayExerciseDAO;
 
     public DBPopulator(EntityManagerFactory emf) {
-        // Use direct DAO instances instead of singletons
         this.weekDAO = new WeekDAO(emf);
         this.dayDAO = new DayDAO(emf);
         this.exerciseDAO = new ExerciseDAO(emf);
@@ -29,32 +28,64 @@ public class DBPopulator {
     }
 
     public void populate() {
-        // Create Exercises
-        Exercise ex1 = new Exercise();
-        ex1.setName("Push Up");
-        ex1.setDescription("Upper body strength");
-        ex1.setMuscleGroup("Chest");
-        ex1.setEquipment("None");
-        ex1.setDifficulty(Difficulty.NORMAL);
-        ex1 = exerciseDAO.create(ex1);
+        // Exercises
+        Exercise pushUp = new Exercise();
+        pushUp.setName("Push Up");
+        pushUp.setDescription("Upper body strength");
+        pushUp.setMuscleGroup("Chest");
+        pushUp.setEquipment("None");
+        pushUp.setDifficulty(Difficulty.NORMAL);
+        pushUp = exerciseDAO.create(pushUp);
 
-        Exercise ex2 = new Exercise();
-        ex2.setName("Squat");
-        ex2.setDescription("Lower body strength");
-        ex2.setMuscleGroup("Legs");
-        ex2.setEquipment("None");
-        ex2.setDifficulty(Difficulty.EASY);
-        ex2 = exerciseDAO.create(ex2);
+        Exercise squat = new Exercise();
+        squat.setName("Squat");
+        squat.setDescription("Lower body strength");
+        squat.setMuscleGroup("Legs");
+        squat.setEquipment("None");
+        squat.setDifficulty(Difficulty.EASY);
+        squat = exerciseDAO.create(squat);
 
-        Exercise ex3 = new Exercise();
-        ex3.setName("Plank");
-        ex3.setDescription("Core stability");
-        ex3.setMuscleGroup("Core");
-        ex3.setEquipment("None");
-        ex3.setDifficulty(Difficulty.HARD);
-        ex3 = exerciseDAO.create(ex3);
+        Exercise plank = new Exercise();
+        plank.setName("Plank");
+        plank.setDescription("Core stability");
+        plank.setMuscleGroup("Core");
+        plank.setEquipment("None");
+        plank.setDifficulty(Difficulty.HARD);
+        plank = exerciseDAO.create(plank);
 
-        // Create Weeks
+        Exercise hathaYoga = new Exercise();
+        hathaYoga.setName("Hatha Yoga");
+        hathaYoga.setDescription("Gentle yoga focusing on posture and breathing");
+        hathaYoga.setMuscleGroup("Full Body");
+        hathaYoga.setEquipment("Mat");
+        hathaYoga.setDifficulty(Difficulty.EASY);
+        hathaYoga = exerciseDAO.create(hathaYoga);
+
+        Exercise yinYoga = new Exercise();
+        yinYoga.setName("Yin Yoga");
+        yinYoga.setDescription("Slow-paced yoga with long holds");
+        yinYoga.setMuscleGroup("Flexibility");
+        yinYoga.setEquipment("Mat");
+        yinYoga.setDifficulty(Difficulty.EASY);
+        yinYoga = exerciseDAO.create(yinYoga);
+
+        Exercise vinyasaYoga = new Exercise();
+        vinyasaYoga.setName("Vinyasa Flow");
+        vinyasaYoga.setDescription("Dynamic yoga linking breath with movement");
+        vinyasaYoga.setMuscleGroup("Full Body");
+        vinyasaYoga.setEquipment("Mat");
+        vinyasaYoga.setDifficulty(Difficulty.NORMAL);
+        vinyasaYoga = exerciseDAO.create(vinyasaYoga);
+
+        Exercise biking = new Exercise();
+        biking.setName("Biking");
+        biking.setDescription("Cardio endurance training");
+        biking.setMuscleGroup("Legs");
+        biking.setEquipment("Stationary bike");
+        biking.setDifficulty(Difficulty.NORMAL);
+        biking = exerciseDAO.create(biking);
+
+        // Weeks
         Week week1 = new Week();
         week1.setWeekNumber(1);
         week1 = weekDAO.create(week1);
@@ -63,43 +94,157 @@ public class DBPopulator {
         week2.setWeekNumber(2);
         week2 = weekDAO.create(week2);
 
-        // Create Days for Week 1
-        Day day1 = new Day();
-        day1.setDayName("Monday");
-        day1.setWorkoutType("Strength");
-        day1.setTotalWorkoutTime(60);
-        day1.setDifficulty(Difficulty.NORMAL);
-        day1.setWeek(week1);
-        day1 = dayDAO.create(day1);
+        Week week3 = new Week();
+        week3.setWeekNumber(3);
+        week3 = weekDAO.create(week3);
 
-        Day day2 = new Day();
-        day2.setDayName("Wednesday");
-        day2.setWorkoutType("Cardio");
-        day2.setTotalWorkoutTime(45);
-        day2.setDifficulty(Difficulty.EASY);
-        day2.setWeek(week1);
-        day2 = dayDAO.create(day2);
+        // Days
+        Day dayMondayStrengthW1 = new Day();
+        dayMondayStrengthW1.setDayName("Monday");
+        dayMondayStrengthW1.setWorkoutType("Strength");
+        dayMondayStrengthW1.setTotalWorkoutTime(60);
+        dayMondayStrengthW1.setDifficulty(Difficulty.NORMAL);
+        dayMondayStrengthW1.setWeek(week1);
+        dayMondayStrengthW1 = dayDAO.create(dayMondayStrengthW1);
 
-        // Create DayExercises
-        DayExercise de1 = new DayExercise();
-        de1.setId(new DayExerciseKey(day1.getId(), ex1.getId()));
-        de1.setDay(day1);
-        de1.setExercise(ex1);
-        de1.setSets(4);
-        de1.setReps(12);
-        de1.setDurationSeconds(0);
-        dayExerciseDAO.create(de1);
+        Day dayWednesdayCardioW1 = new Day();
+        dayWednesdayCardioW1.setDayName("Wednesday");
+        dayWednesdayCardioW1.setWorkoutType("Cardio");
+        dayWednesdayCardioW1.setTotalWorkoutTime(45);
+        dayWednesdayCardioW1.setDifficulty(Difficulty.EASY);
+        dayWednesdayCardioW1.setWeek(week1);
+        dayWednesdayCardioW1 = dayDAO.create(dayWednesdayCardioW1);
 
-        DayExercise de2 = new DayExercise();
-        de2.setId(new DayExerciseKey(day2.getId(), ex3.getId()));
-        de2.setDay(day2);
-        de2.setExercise(ex3);
-        de2.setSets(3);
-        de2.setReps(0);
-        de2.setDurationSeconds(60);
-        dayExerciseDAO.create(de2);
+        Day dayFridayYogaW1 = new Day();
+        dayFridayYogaW1.setDayName("Friday");
+        dayFridayYogaW1.setWorkoutType("Yoga");
+        dayFridayYogaW1.setTotalWorkoutTime(50);
+        dayFridayYogaW1.setDifficulty(Difficulty.EASY);
+        dayFridayYogaW1.setWeek(week1);
+        dayFridayYogaW1 = dayDAO.create(dayFridayYogaW1);
 
-        System.out.println("Database populated successfully!");
+        Day dayMondayYogaW2 = new Day();
+        dayMondayYogaW2.setDayName("Monday");
+        dayMondayYogaW2.setWorkoutType("Yoga");
+        dayMondayYogaW2.setTotalWorkoutTime(60);
+        dayMondayYogaW2.setDifficulty(Difficulty.EASY);
+        dayMondayYogaW2.setWeek(week2);
+        dayMondayYogaW2 = dayDAO.create(dayMondayYogaW2);
+
+        Day dayThursdayStrengthW2 = new Day();
+        dayThursdayStrengthW2.setDayName("Thursday");
+        dayThursdayStrengthW2.setWorkoutType("Strength");
+        dayThursdayStrengthW2.setTotalWorkoutTime(70);
+        dayThursdayStrengthW2.setDifficulty(Difficulty.HARD);
+        dayThursdayStrengthW2.setWeek(week2);
+        dayThursdayStrengthW2 = dayDAO.create(dayThursdayStrengthW2);
+
+        Day daySaturdayIntervalW3 = new Day();
+        daySaturdayIntervalW3.setDayName("Saturday");
+        daySaturdayIntervalW3.setWorkoutType("4:4 Interval Training");
+        daySaturdayIntervalW3.setTotalWorkoutTime(32); // 4x4 minutes biking + rests
+        daySaturdayIntervalW3.setDifficulty(Difficulty.NORMAL);
+        daySaturdayIntervalW3.setWeek(week3);
+        daySaturdayIntervalW3 = dayDAO.create(daySaturdayIntervalW3);
+
+        // DayExercises (named by day for clarity)
+        // Week 1 - Monday Strength
+        DayExercise dayMondayStrength_PushUps = new DayExercise();
+        dayMondayStrength_PushUps.setId(new DayExerciseKey(dayMondayStrengthW1.getId(), pushUp.getId()));
+        dayMondayStrength_PushUps.setDay(dayMondayStrengthW1);
+        dayMondayStrength_PushUps.setExercise(pushUp);
+        dayMondayStrength_PushUps.setSets(4);
+        dayMondayStrength_PushUps.setReps(12);
+        dayMondayStrength_PushUps.setDurationSeconds(0);
+        dayExerciseDAO.create(dayMondayStrength_PushUps);
+
+        DayExercise dayMondayStrength_Squats = new DayExercise();
+        dayMondayStrength_Squats.setId(new DayExerciseKey(dayMondayStrengthW1.getId(), squat.getId()));
+        dayMondayStrength_Squats.setDay(dayMondayStrengthW1);
+        dayMondayStrength_Squats.setExercise(squat);
+        dayMondayStrength_Squats.setSets(4);
+        dayMondayStrength_Squats.setReps(15);
+        dayMondayStrength_Squats.setDurationSeconds(0);
+        dayExerciseDAO.create(dayMondayStrength_Squats);
+
+        // Week 1 - Wednesday Cardio
+        DayExercise dayWednesdayCardio_Plank = new DayExercise();
+        dayWednesdayCardio_Plank.setId(new DayExerciseKey(dayWednesdayCardioW1.getId(), plank.getId()));
+        dayWednesdayCardio_Plank.setDay(dayWednesdayCardioW1);
+        dayWednesdayCardio_Plank.setExercise(plank);
+        dayWednesdayCardio_Plank.setSets(3);
+        dayWednesdayCardio_Plank.setReps(0);
+        dayWednesdayCardio_Plank.setDurationSeconds(60);
+        dayExerciseDAO.create(dayWednesdayCardio_Plank);
+
+        // Week 1 - Friday Yoga
+        DayExercise dayFridayYoga_Hatha = new DayExercise();
+        dayFridayYoga_Hatha.setId(new DayExerciseKey(dayFridayYogaW1.getId(), hathaYoga.getId()));
+        dayFridayYoga_Hatha.setDay(dayFridayYogaW1);
+        dayFridayYoga_Hatha.setExercise(hathaYoga);
+        dayFridayYoga_Hatha.setSets(1);
+        dayFridayYoga_Hatha.setReps(0);
+        dayFridayYoga_Hatha.setDurationSeconds(1800); // 30 min
+        dayExerciseDAO.create(dayFridayYoga_Hatha);
+
+        DayExercise dayFridayYoga_Yin = new DayExercise();
+        dayFridayYoga_Yin.setId(new DayExerciseKey(dayFridayYogaW1.getId(), yinYoga.getId()));
+        dayFridayYoga_Yin.setDay(dayFridayYogaW1);
+        dayFridayYoga_Yin.setExercise(yinYoga);
+        dayFridayYoga_Yin.setSets(1);
+        dayFridayYoga_Yin.setReps(0);
+        dayFridayYoga_Yin.setDurationSeconds(1800); // 30 min
+        dayExerciseDAO.create(dayFridayYoga_Yin);
+
+        // Week 2 - Monday Yoga
+        DayExercise dayMondayYoga_Vinyasa = new DayExercise();
+        dayMondayYoga_Vinyasa.setId(new DayExerciseKey(dayMondayYogaW2.getId(), vinyasaYoga.getId()));
+        dayMondayYoga_Vinyasa.setDay(dayMondayYogaW2);
+        dayMondayYoga_Vinyasa.setExercise(vinyasaYoga);
+        dayMondayYoga_Vinyasa.setSets(1);
+        dayMondayYoga_Vinyasa.setReps(0);
+        dayMondayYoga_Vinyasa.setDurationSeconds(3600); // 60 min
+        dayExerciseDAO.create(dayMondayYoga_Vinyasa);
+
+        // Week 2 - Thursday Strength
+        DayExercise dayThursdayStrength_PushUps = new DayExercise();
+        dayThursdayStrength_PushUps.setId(new DayExerciseKey(dayThursdayStrengthW2.getId(), pushUp.getId()));
+        dayThursdayStrength_PushUps.setDay(dayThursdayStrengthW2);
+        dayThursdayStrength_PushUps.setExercise(pushUp);
+        dayThursdayStrength_PushUps.setSets(5);
+        dayThursdayStrength_PushUps.setReps(15);
+        dayThursdayStrength_PushUps.setDurationSeconds(0);
+        dayExerciseDAO.create(dayThursdayStrength_PushUps);
+
+        DayExercise dayThursdayStrength_Squats = new DayExercise();
+        dayThursdayStrength_Squats.setId(new DayExerciseKey(dayThursdayStrengthW2.getId(), squat.getId()));
+        dayThursdayStrength_Squats.setDay(dayThursdayStrengthW2);
+        dayThursdayStrength_Squats.setExercise(squat);
+        dayThursdayStrength_Squats.setSets(5);
+        dayThursdayStrength_Squats.setReps(20);
+        dayThursdayStrength_Squats.setDurationSeconds(0);
+        dayExerciseDAO.create(dayThursdayStrength_Squats);
+
+        DayExercise dayThursdayStrength_Plank = new DayExercise();
+        dayThursdayStrength_Plank.setId(new DayExerciseKey(dayThursdayStrengthW2.getId(), plank.getId()));
+        dayThursdayStrength_Plank.setDay(dayThursdayStrengthW2);
+        dayThursdayStrength_Plank.setExercise(plank);
+        dayThursdayStrength_Plank.setSets(4);
+        dayThursdayStrength_Plank.setReps(0);
+        dayThursdayStrength_Plank.setDurationSeconds(90); // fixed: ensure creation and duration set
+        dayExerciseDAO.create(dayThursdayStrength_Plank);
+
+        // Week 3 - Saturday 4:4 Interval (4 min biking × 4 rounds)
+        DayExercise daySaturdayInterval_Biking = new DayExercise();
+        daySaturdayInterval_Biking.setId(new DayExerciseKey(daySaturdayIntervalW3.getId(), biking.getId()));
+        daySaturdayInterval_Biking.setDay(daySaturdayIntervalW3);
+        daySaturdayInterval_Biking.setExercise(biking);
+        daySaturdayInterval_Biking.setSets(4);                 // 4 rounds
+        daySaturdayInterval_Biking.setReps(0);
+        daySaturdayInterval_Biking.setDurationSeconds(240);    // 4 minutes per round
+        dayExerciseDAO.create(daySaturdayInterval_Biking);
+
+        System.out.println("Database populated successfully");
     }
 
     public static void main(String[] args) {

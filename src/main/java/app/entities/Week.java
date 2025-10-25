@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "week")
 public class Week {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

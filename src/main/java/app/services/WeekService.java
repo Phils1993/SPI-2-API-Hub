@@ -34,15 +34,15 @@ public class WeekService {
     }
 
     public WeekDTO update(WeekDTO dto, int id) {
-        Week existing = weekDAO.getById(id);
-        if (existing == null) {
-            throw new RuntimeException("Week not found");
-        }
+        // Update only the fields you care about
         if (dto.getWeekNumber() != 0) {
-            existing.setWeekNumber(dto.getWeekNumber());
+            Week updatedWeek = new Week();
+            updatedWeek.setWeekNumber(dto.getWeekNumber());
+            weekDAO.update(id, updatedWeek);
         }
-        Week updated = weekDAO.update(id, existing);
-        return WeekMapper.toDTO(updated);
+        // Re-fetch with JOIN FETCH so lazy collections are initialized
+        Week refreshed = weekDAO.getById(id);
+        return WeekMapper.toDTO(refreshed);
     }
 
     public void delete(int id) {

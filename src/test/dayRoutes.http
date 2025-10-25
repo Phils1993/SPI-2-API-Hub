@@ -1,12 +1,38 @@
-### Create day
-POST http://localhost:7076/api/v1/day
+### Create Day (Admin only)
+POST {{url}}/day
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
-  "weekId": 1,
   "dayName": "Monday",
   "workoutType": "Strength",
+  "totalWorkoutTime": 60,
   "difficulty": "NORMAL",
-  "totalWorkoutTime": 45,
-  "dayExercises": []
+  "weekId": 1
 }
+
+### Get all Days (Public)
+GET {{url}}/day
+Content-Type: application/json
+
+### Get Day by ID (User role or higher)
+GET {{url}}/day/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Update Day (Admin only)
+PUT {{url}}/day/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "dayName": "Monday",
+  "workoutType": "Cardio",
+  "totalWorkoutTime": 45,
+  "difficulty": "EASY",
+  "weekId": 1
+}
+
+### Delete Day (Admin only)
+DELETE {{url}}/day/1
+Authorization: Bearer {{jwt_token}}
