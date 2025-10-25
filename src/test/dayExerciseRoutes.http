@@ -11,13 +11,11 @@ Authorization: Bearer {{jwt_token}}
   "durationSeconds": 60
 }
 
-### Get all DayExercises (Public)
+### Get all DayExercises (Public - ANYONE)
 GET {{url}}/dayExercise
-Content-Type: application/json
 
-### Get DayExercises for a specific day (User role or higher)
+### Get DayExercises for a specific day (User/Admin)
 GET {{url}}/dayExercise/1
-Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### Update a DayExercise (Admin only)

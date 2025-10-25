@@ -19,10 +19,10 @@ public class WeekRoutes {
         return () -> {
             path("week", () -> {
                 post(weekController.create(), Roles.ADMIN);
-                get(weekController.getAll(), Roles.USER);
+                get(weekController.getAll(), Roles.USER,Roles.ADMIN);
 
                 path("{id}", () -> {
-                    get(weekController.getById(), Roles.USER);
+                    get(weekController.getById(), Roles.USER,Roles.ADMIN);
                     put(weekController.update(), Roles.ADMIN);
                     delete(weekController.delete(), Roles.ADMIN);
                 });

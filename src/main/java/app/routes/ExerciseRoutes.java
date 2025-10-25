@@ -19,10 +19,10 @@ public class ExerciseRoutes {
         return () -> {
             path("exercise", () -> {
                 post(exerciseController.create(), Roles.ADMIN);
-                get(exerciseController.getAll(), Roles.USER);
+                get(exerciseController.getAll(), Roles.USER, Roles.ADMIN);
 
                 path("{id}", () -> {
-                    get(exerciseController.getById(), Roles.USER);
+                    get(exerciseController.getById(), Roles.USER, Roles.ADMIN);
                     put(exerciseController.update(), Roles.ADMIN);
                     delete(exerciseController.delete(), Roles.ADMIN);
                 });

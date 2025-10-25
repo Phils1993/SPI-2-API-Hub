@@ -1,24 +1,28 @@
-### Create an exercise
-POST http://localhost:7000/api/exercises
+### Create an exercise (Admin only)
+POST {{url}}/exercise
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Bench Press",
   "description": "Chest exercise using barbell",
   "muscleGroup": "Chest",
   "equipment": "Barbell",
-  "difficulty": "MEDIUM"
+  "difficulty": "HARD"
 }
 
-### Get all exercises
-GET http://localhost:7000/api/exercises
+### Get all exercises (User/Admin)
+GET {{url}}/exercise
+Authorization: Bearer {{jwt_token}}
 
-### Get exercise by ID
-GET http://localhost:7000/api/exercises/1
+### Get exercise by ID (User/Admin)
+GET {{url}}/exercise/1
+Authorization: Bearer {{jwt_token}}
 
-### Update exercise
-PUT http://localhost:7000/api/exercises/1
+### Update exercise (Admin only)
+PUT {{url}}/exercise/2
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Incline Bench Press",
@@ -28,5 +32,6 @@ Content-Type: application/json
   "difficulty": "HARD"
 }
 
-### Delete exercise
-DELETE http://localhost:7000/api/exercises/1
+### Delete exercise (Admin only)
+DELETE {{url}}/exercise/2
+Authorization: Bearer {{jwt_token}}

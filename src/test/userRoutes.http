@@ -1,55 +1,58 @@
-### A simple get request to the test endpoint. No need for login
+### Test endpoint (no login required)
 GET {{url}}/auth/test/
 
-### Populate the database with some data
-//GET {{url}}//populate/
-
-### Create a new user - this one will only get a USER role by default
+### Register a new user (default role = USER)
 POST {{url}}/auth/register/
+Content-Type: application/json
 
 {
-    "username": "Gruppe18",
-    "password": "pass12345"
+  "username": "Gruppe18",
+  "password": "pass12345"
 }
 
-###
+### Login as normal user (Gruppe18)
 POST {{url}}/auth/login/
+Content-Type: application/json
 
 {
-    "username": "Gruppe18",
-    "password": "pass12345"
+  "username": "Gruppe18",
+  "password": "pass12345"
 }
 
-###
+> {% // for global use of JWT in endpoints
+    client.global.set("jwt_token", response.body.Token);
+    console.log("User JWT Token:", client.global.get("jwt_token"));
+%}
+
+### Login as admin (Admin)
 POST {{url}}/auth/login/
+Content-Type: application/json
 
 {
-    "username": "Admin",
-    "password": "pass12345"
+  "username": "Admin",
+  "password": "pass12345"
 }
 
 > {%
-    client.global.set("jwt_token", response.body.token);
-    console.log("JWT Token:", client.global.get("jwt_token"));
+    client.global.set("jwt_token", response.body.Token);
+    console.log("Admin JWT Token:", client.global.get("jwt_token"));
 %}
 
-###
+### Protected endpoint (USER role required)
 GET {{url}}/protected/user_demo/
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJWYWxkZW1hciBQb3Vsc2VuIiwic3ViIjoiR3J1cHBlMTgiLCJleHAiOjE3NjEyMTA0MjksInJvbGVzIjoiVVNFUiIsInVzZXJuYW1lIjoiR3J1cHBlMTgifQ.U0Jg9rsN2LVXP9bREsAYeGfPX6LH4HbAiIbmrgEPWRw
+Authorization: Bearer {{jwt_token}}
 
-###
+### Protected endpoint (ADMIN role required)
 GET {{url}}/protected/admin_demo/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
-### Add admin role to user
+### Add admin role to the currently logged‑in user
 POST {{url}}/auth/user/addrole/
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "role": "admin"
+  "role": "admin"
 }
-Accept: application/json
-Authorization: Bearer {{jwt_token}}

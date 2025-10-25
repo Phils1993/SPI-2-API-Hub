@@ -18,8 +18,8 @@ public class DayRoutes {
         return () -> {
             path("day", () -> {
                 // Public endpoints
-                get(dayController.getAll(), Roles.ANYONE);
-                get("{id}", dayController.getById(), Roles.USER);
+                get(dayController.getAll(), Roles.USER, Roles.ADMIN);
+                get("{id}", dayController.getById(), Roles.USER, Roles.ADMIN);
 
                 // Admin-only endpoints
                 post(dayController.create(), Roles.ADMIN);

@@ -8,16 +8,15 @@ Authorization: Bearer {{jwt_token}}
   "workoutType": "Strength",
   "totalWorkoutTime": 60,
   "difficulty": "NORMAL",
-  "weekId": 1
+  "weekId": 3
 }
 
-### Get all Days (Public)
+### Get all Days (User/Admin)
 GET {{url}}/day
-Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
-### Get Day by ID (User role or higher)
+### Get Day by ID (User/Admin)
 GET {{url}}/day/1
-Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### Update Day (Admin only)
@@ -30,7 +29,7 @@ Authorization: Bearer {{jwt_token}}
   "workoutType": "Cardio",
   "totalWorkoutTime": 45,
   "difficulty": "EASY",
-  "weekId": 1
+  "weekId": 3
 }
 
 ### Delete Day (Admin only)

@@ -1,16 +1,31 @@
-### Create week
-POST {{url}}/api/v1/week
+### Create week (Admin only)
+POST {{url}}/week
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
-  "weekNumber": 1,
+  "weekNumber": 9,
   "days": []
 }
 
-### Get all weeks
-GET {{url}}/api/v1/week
-Content-Type: application/json
+### Get all weeks (User/Admin)
+GET {{url}}/week
+Authorization: Bearer {{jwt_token}}
 
-### Get week by id
-GET {{url}}/api/v1/week/1
+### Get week by id (User/Admin)
+GET {{url}}/week/1
+Authorization: Bearer {{jwt_token}}
+
+### Update week (Admin only)
+PUT {{url}}/week/9
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "weekNumber": 2,
+  "days": []
+}
+
+### Delete week (Admin only)
+DELETE {{url}}/week/1
+Authorization: Bearer {{jwt_token}}
