@@ -28,7 +28,6 @@ public class RoutesRegistry {
             dayExerciseRoutes.getRoutes().addEndpoints();
             securityRoutes.getSecurityRoutes().addEndpoints();
             SecurityRoutes.getSecuredRoutes().addEndpoints();
-
         };
     }
 }

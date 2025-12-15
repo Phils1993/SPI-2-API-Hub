@@ -12,6 +12,11 @@ Authorization: Bearer {{jwt_token}}
 GET {{url}}/week
 Authorization: Bearer {{jwt_token}}
 
+> {%
+  client.test("Status is 200", () => client.assert(response.status === 200));
+  client.test("Response contains weeks", () => client.assert(response.body.length > 0));
+%}
+
 ### Get week by id (User/Admin)
 GET {{url}}/week/1
 Authorization: Bearer {{jwt_token}}
