@@ -10,7 +10,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.Set;
 
-public class SecurityDAO implements ISecurityDAO{
+public class SecurityDAO implements ISecurityDAO {
 
     private final EntityManagerFactory emf;
 
@@ -39,8 +39,10 @@ public class SecurityDAO implements ISecurityDAO{
     @Override
     public User getVerifiedUser(String username, String password) throws ValidationException {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+            TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE LOWER(u.username) = LOWER(:username)", User.class);
             q.setParameter("username", username);
+            System.out.println("***** USERNAME: " + username);
+
             User foundUser = q.getResultStream().findFirst().orElse(null);
 
             if (foundUser == null) {

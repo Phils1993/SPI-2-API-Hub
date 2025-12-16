@@ -45,6 +45,10 @@ public class SecurityController implements ISecurityController {
         return (Context ctx) -> {
             // Læs JSON body ind som et User-objekt
             User user = ctx.bodyAsClass(User.class);
+            System.out.println("Login attempt: username="
+                    + user.getUsername()
+                    + ", password="
+                    + user.getPassword());
             try {
                 // Tjek i databasen om brugeren findes og password passer
                 User verified = securityDAO.getVerifiedUser(user.getUsername(), user.getPassword());
