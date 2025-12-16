@@ -39,9 +39,12 @@ public class SecurityDAO implements ISecurityDAO {
     @Override
     public User getVerifiedUser(String username, String password) throws ValidationException {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE LOWER(u.username) = LOWER(:username)", User.class);
+            // JPQL med JOIN FETCH for at hente rollerne sammen med brugeren
+            TypedQuery<User> q = em.createQuery(
+                    "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE LOWER(u.username) = LOWER(:username)",
+                    User.class
+            );
             q.setParameter("username", username);
-            System.out.println("***** USERNAME: " + username);
 
             User foundUser = q.getResultStream().findFirst().orElse(null);
 
@@ -51,7 +54,7 @@ public class SecurityDAO implements ISecurityDAO {
 
             System.out.println("****** FOUND USER ****** " + foundUser.getUsername());
 
-            // Hent rollerne og log dem
+            // Roller logges
             Set<Role> roles = foundUser.getRoles();
             if (roles != null && !roles.isEmpty()) {
                 roles.forEach(role -> System.out.println("Role: " + role.getRoleName()));
@@ -59,7 +62,7 @@ public class SecurityDAO implements ISecurityDAO {
                 System.out.println("No roles assigned to user");
             }
 
-            // Verificér password
+            // Password verificeres
             if (foundUser.verifyPassword(password)) {
                 return foundUser;
             } else {
@@ -67,6 +70,7 @@ public class SecurityDAO implements ISecurityDAO {
             }
         }
     }
+
 
 
     @Override
