@@ -22,7 +22,7 @@ public class ApplicationConfig {
         ServiceRegistry services = new ServiceRegistry(emf);
         RoutesRegistry routes = new RoutesRegistry(services);
 
-        var app = Javalin.create(config -> configure(config, routes));
+        app = Javalin.create(config -> configure(config, routes));
 
         SecurityController securityController = new SecurityController();
         app.beforeMatched(securityController.authenticate());
@@ -45,6 +45,7 @@ public class ApplicationConfig {
     private static void configure(JavalinConfig config, RoutesRegistry routes) {
         config.showJavalinBanner = false;
         config.bundledPlugins.enableRouteOverview("/routes");
+        config.http.defaultContentType = "application/json";
         config.router.contextPath = "/api/v1";
         config.router.apiBuilder(routes.getRoutes());
     }
