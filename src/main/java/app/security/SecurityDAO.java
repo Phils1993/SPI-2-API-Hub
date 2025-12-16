@@ -6,6 +6,9 @@ import app.exceptions.EntityNotFoundException;
 import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+
+import java.util.Set;
 
 public class SecurityDAO implements ISecurityDAO{
 
@@ -15,6 +18,7 @@ public class SecurityDAO implements ISecurityDAO{
         this.emf = emf;
     }
 
+    /*
     @Override
     public User getVerifiedUser(String username, String password) throws ValidationException {
         try (EntityManager em = emf.createEntityManager()) {
@@ -29,6 +33,39 @@ public class SecurityDAO implements ISecurityDAO{
             }
         }
     }
+
+     */
+
+    @Override
+    public User getVerifiedUser(String username, String password) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+            q.setParameter("username", username);
+            User foundUser = q.getResultStream().findFirst().orElse(null);
+
+            if (foundUser == null) {
+                throw new ValidationException("User not found: " + username);
+            }
+
+            System.out.println("****** FOUND USER ****** " + foundUser.getUsername());
+
+            // Hent rollerne og log dem
+            Set<Role> roles = foundUser.getRoles();
+            if (roles != null && !roles.isEmpty()) {
+                roles.forEach(role -> System.out.println("Role: " + role.getRoleName()));
+            } else {
+                System.out.println("No roles assigned to user");
+            }
+
+            // Verificér password
+            if (foundUser.verifyPassword(password)) {
+                return foundUser;
+            } else {
+                throw new ValidationException("Invalid username or password");
+            }
+        }
+    }
+
 
     @Override
     public User createUser(String username, String password) {

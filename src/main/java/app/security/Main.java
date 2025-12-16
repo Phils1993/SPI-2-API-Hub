@@ -15,11 +15,11 @@ public class Main {
         ISecurityDAO dao = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
 
         User user = dao.createUser("Gruppe18", "pass12345");
-        System.out.println(user.getUserName()+": "+user.getPassword());
+        System.out.println(user.getUsername()+": "+user.getPassword());
         Role role = dao.createRole("User");
 
         User admin = dao.createUser("Admin", "pass12345");
-        System.out.println(admin.getUserName()+": "+admin.getPassword());
+        System.out.println(admin.getUsername()+": "+admin.getPassword());
         Role roleAdmin = dao.createRole("Admin");
 
         try {
@@ -31,7 +31,7 @@ public class Main {
         }
         try {
             User validatedUser = dao.getVerifiedUser("Gruppe18", "pass12345");
-            System.out.println("User was validated: "+validatedUser.getUserName());
+            System.out.println("User was validated: "+validatedUser.getUsername());
             User validatedAdmin = dao.getVerifiedUser("Admin", "pass12345");
         } catch (ValidationException e) {
             e.printStackTrace();
