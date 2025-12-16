@@ -14,7 +14,7 @@ public class SecurityRoutes {
     public EndpointGroup getSecurityRoutes () {
         return () -> {
             path("auth", () -> {
-                post("login", securityController.login());
+                post("login", securityController.login(), Roles.ANYONE);
                 post("/register", securityController.register(), Roles.ANYONE);
                 get("healthcheck", securityController::healthCheck, Roles.ANYONE);
             });

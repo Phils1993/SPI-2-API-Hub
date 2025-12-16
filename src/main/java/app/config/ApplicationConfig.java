@@ -24,11 +24,6 @@ public class ApplicationConfig {
 
         app = Javalin.create(config -> configure(config, routes));
 
-        SecurityController securityController = new SecurityController();
-        app.beforeMatched(securityController.authenticate());
-        app.beforeMatched(securityController.authorize());
-
-
         // CORS HEADERS
         setCORS();
         setSecurity();
@@ -50,23 +45,41 @@ public class ApplicationConfig {
         config.router.apiBuilder(routes.getRoutes());
     }
 
+        private static void setCORS() {
+            app.before(ctx -> {
+                String origin = ctx.header("Origin");
+                if (origin != null) {
+                    ctx.header("Access-Control-Allow-Origin", origin);
+                }
 
-    private static void setCORS() {
-        app.before(ApplicationConfig::setCorsHeaders);
-        app.options("/*", ApplicationConfig::setCorsHeaders);
-    }
+                ctx.header("Vary", "Origin");
+                ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+                ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                ctx.header("Access-Control-Allow-Credentials", "true");
 
-    private static void setCorsHeaders(Context ctx) {
-        ctx.header("Access-Control-Allow-Origin", "*");
-        ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-        ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        ctx.header("Access-Control-Allow-Credentials", "true");
-    }
+                if (ctx.method().toString().equals("OPTIONS")) {
+                    ctx.status(200);
+                }
+            });
+        }
+
+
+
+
+
 
     private static void setSecurity() {
         SecurityController securityController = new SecurityController();
         app.beforeMatched(securityController.authenticate());
         app.beforeMatched(securityController.authorize());
+    }
+
+    private static void setCorsHeadersOptions(Context ctx) {
+        ctx.header("Access-Control-Allow-Origin", "*");
+        ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        ctx.header("Access-Control-Allow-Credentials", "true");
+        ctx.status(204);
     }
 
     private static void setGeneralExceptionHandling() {

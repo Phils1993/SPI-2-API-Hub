@@ -65,7 +65,7 @@ public class SecurityController implements ISecurityController {
                 // Byg JSON response
                 ObjectNode on = mapper
                         .createObjectNode()
-                        .put("Token", token)
+                        .put("token", token)
                         .put("username", userDTO.getUsername());
 
                 // Send JSON tilbage med status 200 OK
@@ -147,6 +147,11 @@ public class SecurityController implements ISecurityController {
     @Override
     public Handler authorize() {
         return (Context ctx) -> {
+
+            if (ctx.method().toString().equals("OPTIONS")) {
+                return;
+            }
+
             Set<String> allowedRoles = ctx.routeRoles()
                     .stream()
                     .map(role -> role.toString().toUpperCase())
@@ -206,6 +211,7 @@ public class SecurityController implements ISecurityController {
      * Henter token fra "Authorization" headeren
      * Forventet format: "Bearer <token>"
      */
+    /*
     private static String getToken(Context ctx) {
         String header = ctx.header("Authorization");
         if (header == null) {
@@ -218,6 +224,17 @@ public class SecurityController implements ISecurityController {
             throw new UnauthorizedResponse("Authorization header is malformed");
         }
         return token;
+    }
+
+     */
+    private static String getToken(Context ctx) {
+        String header = ctx.header("Authorization");
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new UnauthorizedResponse("Authorization header missing or malformed");
+        }
+
+        return header.substring(7);
     }
 
 
