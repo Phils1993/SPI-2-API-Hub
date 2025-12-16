@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 public class ApplicationConfig {
     private static Javalin app;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
@@ -25,7 +24,10 @@ public class ApplicationConfig {
         app = Javalin.create(config -> configure(config, routes));
 
         // CORS HEADERS
-        setCORS();
+        app.before(ApplicationConfig::corsHeaders);
+        app.options("/*", ApplicationConfig::corsHeadersOptions);
+
+
         setSecurity();
         setGeneralExceptionHandling();
         setDebugHeaderLogging();
@@ -45,27 +47,33 @@ public class ApplicationConfig {
         config.router.apiBuilder(routes.getRoutes());
     }
 
-        private static void setCORS() {
-            app.before(ctx -> {
-                String origin = ctx.header("Origin");
-                if (origin != null) {
-                    ctx.header("Access-Control-Allow-Origin", origin);
-                }
+    private static void corsHeadersOptions(Context ctx) {
+        String origin = ctx.header("Origin");
 
-                ctx.header("Vary", "Origin");
-                ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-                ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-                ctx.header("Access-Control-Allow-Credentials", "true");
-
-                if (ctx.method().toString().equals("OPTIONS")) {
-                    ctx.status(200);
-                }
-            });
+        if (origin != null) {
+            ctx.header("Access-Control-Allow-Origin", origin);
         }
 
+        ctx.header("Vary", "Origin");
+        ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        ctx.header("Access-Control-Allow-Credentials", "true");
+        ctx.status(204);
+    }
 
 
+    private static void corsHeaders(Context ctx) {
+        String origin = ctx.header("Origin");
 
+        if (origin != null) {
+            ctx.header("Access-Control-Allow-Origin", origin);
+        }
+
+        ctx.header("Vary", "Origin");
+        ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        ctx.header("Access-Control-Allow-Credentials", "true");
+    }
 
 
     private static void setSecurity() {
@@ -74,13 +82,6 @@ public class ApplicationConfig {
         app.beforeMatched(securityController.authorize());
     }
 
-    private static void setCorsHeadersOptions(Context ctx) {
-        ctx.header("Access-Control-Allow-Origin", "*");
-        ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        ctx.header("Access-Control-Allow-Credentials", "true");
-        ctx.status(204);
-    }
 
     private static void setGeneralExceptionHandling() {
         app.exception(Exception.class, (e, ctx) -> {
