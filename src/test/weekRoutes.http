@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "weekNumber": 9,
+  "weekNumber": 64,
   "days": []
 }
 

@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "dayId": 1,
+  "dayId": 99,
   "exerciseId": 2,
   "sets": 3,
   "reps": 12,

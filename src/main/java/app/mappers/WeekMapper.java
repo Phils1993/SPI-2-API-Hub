@@ -1,8 +1,10 @@
 package app.mappers;
 
 import app.dtos.WeekDTO;
+import app.entities.Day;
 import app.entities.Week;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WeekMapper {
@@ -29,12 +31,16 @@ public class WeekMapper {
         week.setId(dto.getId());
         week.setWeekNumber(dto.getWeekNumber());
 
-        if (dto.getDays() != null)
-            week.setDays(dto.getDays()
-                    .stream()
+        if (dto.getDays() != null) {
+            Set<Day> days = dto.getDays().stream()
                     .map(DayMapper::toEntity)
-                    .collect(Collectors.toSet()));
-
+                    .collect(Collectors.toSet());
+            // IMPORTANT: set the back-reference
+            for (Day d : days) {
+                d.setWeek(week);
+            }
+            week.setDays(days);
+        }
         return week;
     }
 }

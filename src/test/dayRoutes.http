@@ -8,7 +8,7 @@ Authorization: Bearer {{jwt_token}}
   "workoutType": "Strength",
   "totalWorkoutTime": 60,
   "difficulty": "NORMAL",
-  "weekId": 3
+  "weekId": 64
 }
 
 ### Get all Days (User/Admin)
